@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web.Mvc;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Repositories;
-using TutsUniversity.ViewModels;
 
 namespace TutsUniversity.Controllers
 {

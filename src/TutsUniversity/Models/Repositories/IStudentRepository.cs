@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using PagedList;
-using TutsUniversity.ViewModels;
 
 namespace TutsUniversity.Models.Repositories
 {

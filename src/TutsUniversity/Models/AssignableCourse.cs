@@ -1,4 +1,4 @@
-﻿namespace TutsUniversity.ViewModels
+﻿namespace TutsUniversity.Models
 {
     public class AssignableCourse
     {

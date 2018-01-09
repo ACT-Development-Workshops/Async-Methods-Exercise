@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TutsUniversity.ViewModels
+namespace TutsUniversity.Models
 {
     public class DailyEnrollmentTotals
     {

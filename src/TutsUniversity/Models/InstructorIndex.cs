@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using TutsUniversity.Models;
 
-namespace TutsUniversity.ViewModels
+namespace TutsUniversity.Models
 {
     public class InstructorIndex
     {

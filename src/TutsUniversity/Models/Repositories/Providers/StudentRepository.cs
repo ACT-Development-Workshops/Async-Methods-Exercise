@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using PagedList;
 using TutsUniversity.Infrastructure.Data;
-using TutsUniversity.ViewModels;
 
 namespace TutsUniversity.Models.Repositories.Providers
 {
