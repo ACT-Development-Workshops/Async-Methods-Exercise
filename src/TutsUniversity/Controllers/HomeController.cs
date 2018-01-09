@@ -1,13 +1,11 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using TutsUniversity.Infrastructure.Data;
-using TutsUniversity.ViewModels;
+﻿using System.Web.Mvc;
+using TutsUniversity.Models.Repositories;
 
 namespace TutsUniversity.Controllers
 {
     public class HomeController : Controller
     {
-        private TutsUniversityContext db = new TutsUniversityContext();
+        private readonly IStudentRepository studentRepository = RepositoryFactory.Students;
 
         public ActionResult Index()
         {
@@ -16,15 +14,8 @@ namespace TutsUniversity.Controllers
 
         public ActionResult About()
         {
-            IQueryable<EnrollmentDateGroup> data = from student in db.Students
-                                                   group student by student.EnrollmentDate into dateGroup
-                                                   select new EnrollmentDateGroup()
-                                                   {
-                                                       EnrollmentDate = dateGroup.Key,
-                                                       StudentCount = dateGroup.Count()
-                                                   };
-
-            return View(data.ToList());
+            var studentBodyStatistics = studentRepository.GetDailyEnrollmentTotals();
+            return View(studentBodyStatistics);
         }
 
         public ActionResult Contact()
@@ -36,7 +27,7 @@ namespace TutsUniversity.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                db.Dispose();
+                studentRepository.Dispose();
 
             base.Dispose(disposing);
         }

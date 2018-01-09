@@ -164,7 +164,7 @@
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignableCourse.cs" />
-    <Compile Include="ViewModels\EnrollmentDateGroup.cs" />
+    <Compile Include="ViewModels\DailyEnrollmentTotals.cs" />
     <Compile Include="ViewModels\InstructorIndex.cs" />
   </ItemGroup>
   <ItemGroup>

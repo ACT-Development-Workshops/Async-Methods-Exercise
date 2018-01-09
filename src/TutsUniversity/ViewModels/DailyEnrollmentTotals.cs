@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TutsUniversity.ViewModels
 {
-    public class EnrollmentDateGroup
+    public class DailyEnrollmentTotals
     {
         [DataType(DataType.Date)]
         public DateTime? EnrollmentDate { get; set; }

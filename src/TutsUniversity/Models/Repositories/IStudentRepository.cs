@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using PagedList;
+using TutsUniversity.ViewModels;
 
 namespace TutsUniversity.Models.Repositories
 {
@@ -8,6 +10,8 @@ namespace TutsUniversity.Models.Repositories
         void Add(Student student);
 
         void Delete(int studentId);
+
+        IEnumerable<DailyEnrollmentTotals> GetDailyEnrollmentTotals();
 
         Student GetStudent(int studentId);
 

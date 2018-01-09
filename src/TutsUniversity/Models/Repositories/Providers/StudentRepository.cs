@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PagedList;
 using TutsUniversity.Infrastructure.Data;
+using TutsUniversity.ViewModels;
 
 namespace TutsUniversity.Models.Repositories.Providers
 {
@@ -19,6 +21,18 @@ namespace TutsUniversity.Models.Repositories.Providers
         {
             context.Students.Remove(GetStudent(studentId));
             context.SaveChanges();
+        }
+
+        public IEnumerable<DailyEnrollmentTotals> GetDailyEnrollmentTotals()
+        {
+            return context.Students
+                .GroupBy(s => s.EnrollmentDate)
+                .Select(dateGrouping => new DailyEnrollmentTotals
+                {
+                    EnrollmentDate = dateGrouping.Key,
+                    StudentCount = dateGrouping.Count()
+                })
+                .ToList();
         }
 
         public Student GetStudent(int studentId)
