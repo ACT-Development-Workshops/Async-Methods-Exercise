@@ -6,7 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using TutsUniversity.DAL;
+using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
 
 namespace TutsUniversity.Controllers

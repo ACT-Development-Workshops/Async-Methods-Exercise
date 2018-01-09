@@ -1,7 +1,6 @@
 using System.Data.Entity.Migrations;
-using TutsUniversity.DAL;
 
-namespace TutsUniversity.Migrations
+namespace TutsUniversity.Infrastructure.Data.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<SchoolContext>
     {

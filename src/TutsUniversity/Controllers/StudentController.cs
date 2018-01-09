@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PagedList;
-using TutsUniversity.DAL;
+using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
 
 namespace TutsUniversity.Controllers

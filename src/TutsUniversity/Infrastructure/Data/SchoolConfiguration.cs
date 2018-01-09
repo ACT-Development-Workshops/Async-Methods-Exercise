@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.SqlServer;
 
-namespace TutsUniversity.DAL
+namespace TutsUniversity.Infrastructure.Data
 {
     public class SchoolConfiguration : DbConfiguration
     {

@@ -2,7 +2,7 @@
 using System.Data.Entity.ModelConfiguration.Conventions;
 using TutsUniversity.Models;
 
-namespace TutsUniversity.DAL
+namespace TutsUniversity.Infrastructure.Data
 {
     public class SchoolContext : DbContext
     {

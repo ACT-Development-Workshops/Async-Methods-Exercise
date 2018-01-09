@@ -5,7 +5,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using TutsUniversity.DAL;
+using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
 using TutsUniversity.ViewModels;
 
