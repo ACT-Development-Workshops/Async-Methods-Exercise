@@ -16,14 +16,14 @@ namespace TutsUniversity.Controllers
         private TutsUniversityContext db = new TutsUniversityContext();
 
         // GET: Department
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var departments = db.Departments.Include(d => d.Administrator);
-            return View(await departments.ToListAsync());
+            return View(departments.ToList());
         }
 
         // GET: Department/Details/5
-        public async Task<ActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -31,11 +31,11 @@ namespace TutsUniversity.Controllers
             }
 
             // Commenting out original code to show how to use a raw SQL query.
-            //Department department = await db.Departments.FindAsync(id);
+            //Department department = db.Departments.Find(id);
 
             // Create and execute raw SQL query.
             string query = "SELECT * FROM Department WHERE DepartmentID = @p0";
-            Department department = await db.Departments.SqlQuery(query, id).SingleOrDefaultAsync();
+            Department department = db.Departments.SqlQuery(query, id).SingleOrDefault();
 
             if (department == null)
             {
@@ -56,12 +56,11 @@ namespace TutsUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "DepartmentID,Name,Budget,StartDate,InstructorID")] Department department)
+        public ActionResult Create([Bind(Include = "DepartmentID,Name,Budget,StartDate,InstructorID")] Department department)
         {
             if (ModelState.IsValid)
             {
                 db.Departments.Add(department);
-                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -70,13 +69,13 @@ namespace TutsUniversity.Controllers
         }
 
         // GET: Department/Edit/5
-        public async Task<ActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = db.Departments.Find(id);
             if (department == null)
             {
                 return HttpNotFound();
@@ -90,7 +89,7 @@ namespace TutsUniversity.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(int? id, byte[] rowVersion)
+        public ActionResult Edit(int? id, byte[] rowVersion)
         {
             string[] fieldsToBind = new string[] { "Name", "Budget", "StartDate", "InstructorID", "RowVersion" };
 
@@ -99,7 +98,7 @@ namespace TutsUniversity.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var departmentToUpdate = await db.Departments.FindAsync(id);
+            var departmentToUpdate = db.Departments.Find(id);
             if (departmentToUpdate == null)
             {
                 Department deletedDepartment = new Department();
@@ -115,7 +114,7 @@ namespace TutsUniversity.Controllers
                 try
                 {
                     db.Entry(departmentToUpdate).OriginalValues["RowVersion"] = rowVersion;
-                    await db.SaveChangesAsync();
+                    db.SaveChanges();
 
                     return RedirectToAction("Index");
                 }
@@ -164,13 +163,13 @@ namespace TutsUniversity.Controllers
         }
 
         // GET: Department/Delete/5
-        public async Task<ActionResult> Delete(int? id, bool? concurrencyError)
+        public ActionResult Delete(int? id, bool? concurrencyError)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Department department = await db.Departments.FindAsync(id);
+            Department department = db.Departments.Find(id);
             if (department == null)
             {
                 if (concurrencyError.GetValueOrDefault())
@@ -196,12 +195,12 @@ namespace TutsUniversity.Controllers
         // POST: Department/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(Department department)
+        public ActionResult Delete(Department department)
         {
             try
             {
                 db.Entry(department).State = EntityState.Deleted;
-                await db.SaveChangesAsync();
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             catch (DbUpdateConcurrencyException)
