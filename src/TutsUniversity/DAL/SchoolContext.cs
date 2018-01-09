@@ -6,6 +6,11 @@ namespace TutsUniversity.DAL
 {
     public class SchoolContext : DbContext
     {
+        static SchoolContext()
+        {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<SchoolContext>());
+        }
+
         public DbSet<Course> Courses { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
@@ -23,6 +28,6 @@ namespace TutsUniversity.DAL
                 .Map(t => t.MapLeftKey("CourseID")
                     .MapRightKey("InstructorID")
                     .ToTable("CourseInstructor"));
-        }
+        }       
     }
 }
