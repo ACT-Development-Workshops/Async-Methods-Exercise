@@ -141,29 +141,9 @@
     </Compile>
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Migrations\201411021828194_InitialCreate.cs" />
-    <Compile Include="Migrations\201411021828194_InitialCreate.Designer.cs">
-      <DependentUpon>201411021828194_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021834484_MaxLengthOnNames.cs" />
-    <Compile Include="Migrations\201411021834484_MaxLengthOnNames.Designer.cs">
-      <DependentUpon>201411021834484_MaxLengthOnNames.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021841373_ComplexDataModel.cs" />
-    <Compile Include="Migrations\201411021841373_ComplexDataModel.Designer.cs">
-      <DependentUpon>201411021841373_ComplexDataModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411021957458_DepartmentSP.cs" />
-    <Compile Include="Migrations\201411021957458_DepartmentSP.Designer.cs">
-      <DependentUpon>201411021957458_DepartmentSP.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411022009135_RowVersion.cs" />
-    <Compile Include="Migrations\201411022009135_RowVersion.Designer.cs">
-      <DependentUpon>201411022009135_RowVersion.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411022351064_Inheritance.cs" />
-    <Compile Include="Migrations\201411022351064_Inheritance.Designer.cs">
-      <DependentUpon>201411022351064_Inheritance.cs</DependentUpon>
+    <Compile Include="Migrations\201801091500573_Initial.cs" />
+    <Compile Include="Migrations\201801091500573_Initial.Designer.cs">
+      <DependentUpon>201801091500573_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
@@ -247,23 +227,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201411021828194_InitialCreate.resx">
-      <DependentUpon>201411021828194_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021834484_MaxLengthOnNames.resx">
-      <DependentUpon>201411021834484_MaxLengthOnNames.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021841373_ComplexDataModel.resx">
-      <DependentUpon>201411021841373_ComplexDataModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411021957458_DepartmentSP.resx">
-      <DependentUpon>201411021957458_DepartmentSP.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411022009135_RowVersion.resx">
-      <DependentUpon>201411022009135_RowVersion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411022351064_Inheritance.resx">
-      <DependentUpon>201411022351064_Inheritance.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201801091500573_Initial.resx">
+      <DependentUpon>201801091500573_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
