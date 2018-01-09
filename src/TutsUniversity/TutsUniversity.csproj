@@ -153,8 +153,12 @@
     <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Repositories\ICourseRepository.cs" />
     <Compile Include="Models\Repositories\IDepartmentRepository.cs" />
+    <Compile Include="Models\Repositories\IInstructorRepository.cs" />
+    <Compile Include="Models\Repositories\IStudentRepository.cs" />
     <Compile Include="Models\Repositories\Providers\CourseRepository.cs" />
     <Compile Include="Models\Repositories\Providers\DepartmentRepository.cs" />
+    <Compile Include="Models\Repositories\Providers\InstructorRepository.cs" />
+    <Compile Include="Models\Repositories\Providers\StudentRepository.cs" />
     <Compile Include="Models\Repositories\RepositoryFactory.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
