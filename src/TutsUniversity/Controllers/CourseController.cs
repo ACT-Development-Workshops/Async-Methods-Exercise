@@ -100,9 +100,7 @@ namespace TutsUniversity.Controllers
         [HttpPost]
         public ActionResult UpdateCourseCredits(int multiplier)
         {
-            foreach (var course in courseRepository.GetCourses())
-                bus.Send(new UpdateCourseCredits { CourseId = course.CourseID, Credits = course.Credits * multiplier });
-
+            bus.Send(new MultiplyCourseCredits { Multiplier = multiplier });
             return View();
         }
 
