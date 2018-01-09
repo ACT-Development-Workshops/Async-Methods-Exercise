@@ -1,24 +1,26 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System;
 using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
+using TutsUniversity.Models.Repositories;
+using TutsUniversity.Models.Repositories.Providers;
 
 namespace TutsUniversity.Controllers
 {
     public class DepartmentController : Controller
     {
+        private readonly IDepartmentRepository repository = new DepartmentRepository();
         private TutsUniversityContext db = new TutsUniversityContext();
 
         public ActionResult Index()
         {
-            var departments = db.Departments.Include(d => d.Administrator);
-            return View(departments.ToList());
+            var departments = repository.GetDepartments();
+            return View(departments);
         }
 
         public ActionResult Details(int id)
         {
-            var department = db.Departments.Find(id);
+            var department = repository.GetDepartment(id);
             return View(department);
         }
 
@@ -34,7 +36,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Departments.Add(department);
+                repository.Add(department);
                 return RedirectToAction("Index");
             }
 
@@ -44,45 +46,28 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Edit(int id)
         {
-            var department = db.Departments.Find(id);
+            var department = repository.GetDepartment(id);
             ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
             return View(department);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, byte[] rowVersion)
+        public ActionResult Edit(int id, string name, decimal budget, DateTime startDate, int instructorId, byte[] rowVersion)
         {
-            string[] fieldsToBind = new string[] { "Name", "Budget", "StartDate", "InstructorID", "RowVersion" };
-
-            var departmentToUpdate = db.Departments.Find(id);
-
-            if (TryUpdateModel(departmentToUpdate, fieldsToBind))
+            if (ModelState.IsValid)
             {
-                db.Entry(departmentToUpdate).OriginalValues["RowVersion"] = rowVersion;
-                db.SaveChanges();
-
+                repository.Update(id, name, budget, startDate, instructorId, rowVersion);
                 return RedirectToAction("Index");
             }
-
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", departmentToUpdate.InstructorID);
-            return View(departmentToUpdate);
+            
+            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", instructorId);
+            return View(new Department { Budget = budget, DepartmentID = id, InstructorID = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
         }
 
-        public ActionResult Delete(int id, bool? concurrencyError)
+        public ActionResult Delete(int id)
         {
-            var department = db.Departments.Find(id);
-
-            if (concurrencyError.GetValueOrDefault())
-            {
-                ViewBag.ConcurrencyErrorMessage = "The record you attempted to delete "
-                    + "was modified by another user after you got the original values. "
-                    + "The delete operation was canceled and the current values in the "
-                    + "database have been displayed. If you still want to delete this "
-                    + "record, click the Delete button again. Otherwise "
-                    + "click the Back to List hyperlink.";
-            }
-
+            var department = repository.GetDepartment(id);
             return View(department);
         }
 
@@ -90,15 +75,14 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Department department)
         {
-            db.Entry(department).State = EntityState.Deleted;
-            db.SaveChanges();
+            repository.Delete(department.DepartmentID);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                db.Dispose();
+                repository.Dispose();
 
             base.Dispose(disposing);
         }
