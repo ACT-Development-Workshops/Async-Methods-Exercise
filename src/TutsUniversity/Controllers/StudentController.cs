@@ -1,64 +1,71 @@
-﻿using PagedList;
-using System;
-using System.Linq;
+﻿using System;
 using System.Web.Mvc;
-using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
+using TutsUniversity.Models.Repositories;
 
 namespace TutsUniversity.Controllers
 {
     public class StudentController : Controller
     {
-        private TutsUniversityContext db = new TutsUniversityContext();
+        private readonly IStudentRepository studentRepository = RepositoryFactory.Students;
 
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            var searchOptions = new StudentSearchOptions();
 
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+            ConfigureFilter();
+            ConfigureSortOrder();
+            ConfigurePaging();
 
-            ViewBag.CurrentFilter = searchString;
+            return View(studentRepository.Search(searchOptions));
 
-            var students = from s in db.Students
-                           select s;
-            if (!String.IsNullOrEmpty(searchString))
+            void ConfigureFilter()
             {
-                students = students.Where(s => s.LastName.Contains(searchString)
-                                       || s.FirstMidName.Contains(searchString));
-            }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    students = students.OrderByDescending(s => s.LastName);
-                    break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
-                    break;
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
-                    break;
-                default:  // Name ascending 
-                    students = students.OrderBy(s => s.LastName);
-                    break;
+                searchOptions.NameSearch = searchString;
+                if (searchOptions.NameSearch != null)
+                    searchOptions.PageNumber = 1;
+                else
+                    searchOptions.NameSearch = currentFilter;
+
+                ViewBag.CurrentFilter = searchOptions.NameSearch;
             }
 
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(students.ToPagedList(pageNumber, pageSize));
+            void ConfigureSortOrder()
+            {
+                ViewBag.CurrentSort = sortOrder;
+                searchOptions.SortOptions = !string.IsNullOrEmpty(sortOrder) ? (StudentSortOptions) Enum.Parse(typeof(StudentSortOptions), sortOrder) : StudentSortOptions.NameAscending;
+
+                switch (searchOptions.SortOptions)
+                {
+                    case StudentSortOptions.NameAscending:
+                        ViewBag.NameSortParm = StudentSortOptions.NameDescending.ToString();
+                        ViewBag.DateSortParm = StudentSortOptions.DateAscending.ToString();
+                        break;
+                    case StudentSortOptions.NameDescending:
+                        ViewBag.NameSortParm = StudentSortOptions.NameAscending.ToString();
+                        ViewBag.DateSortParm = StudentSortOptions.DateAscending.ToString();
+                        break;
+                    case StudentSortOptions.DateAscending:
+                        ViewBag.DateSortParm = StudentSortOptions.DateDescending.ToString();
+                        ViewBag.NameSortParm = StudentSortOptions.NameAscending.ToString();
+                        break;
+                    case StudentSortOptions.DateDescending:
+                        ViewBag.DateSortParm = StudentSortOptions.DateAscending.ToString();
+                        ViewBag.NameSortParm = StudentSortOptions.NameAscending.ToString();
+                        break;
+                }
+            }
+
+            void ConfigurePaging()
+            {
+                if (page.HasValue)
+                    searchOptions.PageNumber = page.Value;
+            }
         }
 
         public ActionResult Details(int id)
         {
-            var student = db.Students.Find(id);
+            var student = studentRepository.GetStudent(id);
             return View(student);
         }
 
@@ -73,8 +80,7 @@ namespace TutsUniversity.Controllers
         {
             if(ModelState.IsValid)
             {
-                db.Students.Add(student);
-                db.SaveChanges();
+                studentRepository.Add(student);
                 return RedirectToAction("Index");
             }
 
@@ -83,47 +89,41 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Edit(int id)
         {
-            var student = db.Students.Find(id);
+            var student = studentRepository.GetStudent(id);
             return View(student);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int id)
+        public ActionResult EditPost(int id, string lastName, string firstMidName, DateTime enrollmentDate)
         {
-            var studentToUpdate = db.Students.Find(id);
-            if (TryUpdateModel(studentToUpdate, "", new string[] { "LastName", "FirstMidName", "EnrollmentDate" }))
+            if (ModelState.IsValid)
             {
-                db.SaveChanges();
+                studentRepository.Update(id, lastName, firstMidName, enrollmentDate);
                 return RedirectToAction("Index");
             }
-            return View(studentToUpdate);
+
+            return View(new Student{ EnrollmentDate = enrollmentDate, FirstMidName = firstMidName, ID = id, LastName = lastName});
         }
 
-        public ActionResult Delete(int id, bool? saveChangesError = false)
+        public ActionResult Delete(int id)
         {
-            if (saveChangesError.GetValueOrDefault())
-                ViewBag.ErrorMessage = "Delete failed. Try again, and if the problem persists see your system administrator.";
-
-            var student = db.Students.Find(id);
+            var student = studentRepository.GetStudent(id);
             return View(student);
         }
 
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult DeleteConfirmed(int id)
         {
-            var student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
-
+            studentRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                db.Dispose();
+                studentRepository.Dispose();
 
             base.Dispose(disposing);
         }
