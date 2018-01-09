@@ -8,7 +8,7 @@ namespace TutsUniversity.Controllers
 {
     public class HomeController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private TutsUniversityContext db = new TutsUniversityContext();
 
         public ActionResult Index()
         {

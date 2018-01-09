@@ -13,7 +13,7 @@ namespace TutsUniversity.Controllers
 {
     public class InstructorController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private TutsUniversityContext db = new TutsUniversityContext();
 
         // GET: Instructor
         public ActionResult Index(int? id, int? courseID)

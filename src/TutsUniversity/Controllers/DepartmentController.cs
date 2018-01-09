@@ -13,7 +13,7 @@ namespace TutsUniversity.Controllers
 {
     public class DepartmentController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private TutsUniversityContext db = new TutsUniversityContext();
 
         // GET: Department
         public async Task<ActionResult> Index()

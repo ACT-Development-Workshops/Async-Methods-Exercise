@@ -4,11 +4,11 @@ using TutsUniversity.Models;
 
 namespace TutsUniversity.Infrastructure.Data
 {
-    public class SchoolContext : DbContext
+    public class TutsUniversityContext : DbContext
     {
-        static SchoolContext()
+        static TutsUniversityContext()
         {
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<SchoolContext>());
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TutsUniversityContext>());
         }
 
         public DbSet<Course> Courses { get; set; }

@@ -11,7 +11,7 @@ namespace TutsUniversity.Controllers
 {
     public class StudentController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private TutsUniversityContext db = new TutsUniversityContext();
 
         // GET: Student
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
