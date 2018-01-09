@@ -1,7 +1,6 @@
 ﻿using System;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models.Repositories;
-using TutsUniversity.Models.Repositories.Providers;
 
 namespace TutsUniversity.Models.Commands
 {
@@ -12,14 +11,14 @@ namespace TutsUniversity.Models.Commands
 
         public class Handler : IHandleMessages<UpdateCourseCredits>, IDisposable
         {
-            private readonly ICourseRepository repository = new CourseRepository();
+            private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
 
             public void Handle(UpdateCourseCredits message)
             {
-                repository.Update(message.CourseId, message.Credits);
+                courseRepository.Update(message.CourseId, message.Credits);
             }
 
-            public void Dispose() => repository.Dispose();
+            public void Dispose() => courseRepository.Dispose();
         }   
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using TutsUniversity.Infrastructure.Messaging;
-using TutsUniversity.Infrastructure.Messaging.Providers;
 using TutsUniversity.Models.Repositories;
-using TutsUniversity.Models.Repositories.Providers;
 
 namespace TutsUniversity.Models.Commands
 {
@@ -12,8 +10,8 @@ namespace TutsUniversity.Models.Commands
 
         public class Handler : IHandleMessages<MultiplyCourseCredits>, IDisposable
         {
-            private readonly IBus bus = new InMemoryBus();
-            private readonly ICourseRepository courseRepository = new CourseRepository();
+            private readonly Bus bus = Bus.Instance;
+            private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
 
             public void Handle(MultiplyCourseCredits message)
             {

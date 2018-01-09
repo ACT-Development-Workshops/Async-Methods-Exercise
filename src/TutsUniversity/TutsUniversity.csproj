@@ -141,7 +141,7 @@
     </Compile>
     <Compile Include="Infrastructure\Data\Migrations\Configuration.cs" />
     <Compile Include="Infrastructure\Messaging\IHandleMessages.cs" />
-    <Compile Include="Infrastructure\Messaging\IBus.cs" />
+    <Compile Include="Infrastructure\Messaging\Bus.cs" />
     <Compile Include="Infrastructure\Messaging\Providers\InMemoryBus.cs" />
     <Compile Include="Models\Commands\MultiplyCourseCredits.cs" />
     <Compile Include="Models\Commands\UpdateCourseCredits.cs" />
@@ -155,6 +155,7 @@
     <Compile Include="Models\Repositories\IDepartmentRepository.cs" />
     <Compile Include="Models\Repositories\Providers\CourseRepository.cs" />
     <Compile Include="Models\Repositories\Providers\DepartmentRepository.cs" />
+    <Compile Include="Models\Repositories\RepositoryFactory.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignedCourseData.cs" />

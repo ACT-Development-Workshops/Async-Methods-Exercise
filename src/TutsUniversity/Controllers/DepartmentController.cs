@@ -3,24 +3,23 @@ using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Repositories;
-using TutsUniversity.Models.Repositories.Providers;
 
 namespace TutsUniversity.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository repository = new DepartmentRepository();
+        private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
         private TutsUniversityContext db = new TutsUniversityContext();
 
         public ActionResult Index()
         {
-            var departments = repository.GetDepartments();
+            var departments = departmentRepository.GetDepartments();
             return View(departments);
         }
 
         public ActionResult Details(int id)
         {
-            var department = repository.GetDepartment(id);
+            var department = departmentRepository.GetDepartment(id);
             return View(department);
         }
 
@@ -36,7 +35,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                repository.Add(department);
+                departmentRepository.Add(department);
                 return RedirectToAction("Index");
             }
 
@@ -46,7 +45,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Edit(int id)
         {
-            var department = repository.GetDepartment(id);
+            var department = departmentRepository.GetDepartment(id);
             ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
             return View(department);
         }
@@ -57,7 +56,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                repository.Update(id, name, budget, startDate, instructorId, rowVersion);
+                departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
                 return RedirectToAction("Index");
             }
             
@@ -67,7 +66,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Delete(int id)
         {
-            var department = repository.GetDepartment(id);
+            var department = departmentRepository.GetDepartment(id);
             return View(department);
         }
 
@@ -75,14 +74,14 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Department department)
         {
-            repository.Delete(department.DepartmentID);
+            departmentRepository.Delete(department.DepartmentID);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                repository.Dispose();
+                departmentRepository.Dispose();
 
             base.Dispose(disposing);
         }

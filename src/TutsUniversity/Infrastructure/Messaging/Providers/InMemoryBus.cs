@@ -4,11 +4,11 @@ using System.Linq;
 
 namespace TutsUniversity.Infrastructure.Messaging.Providers
 {
-    public class InMemoryBus : IBus
+    public class InMemoryBus : Bus
     {
         private static readonly Dictionary<Type, Type> HandlerByMessageType = new Dictionary<Type, Type>();
 
-        public void Send<TMessage>(TMessage message)
+        public override void Send<TMessage>(TMessage message)
         {
             var handler = (IHandleMessages<TMessage>)Activator.CreateInstance(HandlerByMessageType[message.GetType()]);
             try

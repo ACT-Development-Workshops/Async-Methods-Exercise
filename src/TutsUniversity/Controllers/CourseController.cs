@@ -1,19 +1,17 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Messaging;
-using TutsUniversity.Infrastructure.Messaging.Providers;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Commands;
 using TutsUniversity.Models.Repositories;
-using TutsUniversity.Models.Repositories.Providers;
 
 namespace TutsUniversity.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly IBus bus = new InMemoryBus();
-        private readonly ICourseRepository courseRepository = new CourseRepository();
-        private readonly IDepartmentRepository departmentRepository = new DepartmentRepository();
+        private readonly Bus bus = Bus.Instance;
+        private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
+        private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
 
         public ActionResult Index(int? departmentId)
         {
