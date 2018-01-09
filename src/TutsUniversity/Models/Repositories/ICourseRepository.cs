@@ -8,7 +8,8 @@ namespace TutsUniversity.Models.Repositories
         void Add(Course course);
         void Delete(int id);
         Course GetCourse(int id);
-        IEnumerable<Course> GetCourses(int? departmentId);
+        IEnumerable<Course> GetCourses(int? departmentId = null);
+        void Update(int courseId, int credits);
         void Update(int courseId, string title, int credits, int departmentId);
     }
 }

@@ -1,9 +1,10 @@
-﻿using System.Data.Entity.Infrastructure;
-using System.Linq;
-using System.Net;
+﻿using System.Linq;
 using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Data;
+using TutsUniversity.Infrastructure.Messaging;
+using TutsUniversity.Infrastructure.Messaging.Providers;
 using TutsUniversity.Models;
+using TutsUniversity.Models.Commands;
 using TutsUniversity.Models.Repositories;
 using TutsUniversity.Models.Repositories.Providers;
 
@@ -11,6 +12,7 @@ namespace TutsUniversity.Controllers
 {
     public class CourseController : Controller
     {
+        private readonly IBus bus = new InMemoryBus();
         private readonly ICourseRepository repository = new CourseRepository();
         private TutsUniversityContext db = new TutsUniversityContext();
 
@@ -99,12 +101,11 @@ namespace TutsUniversity.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateCourseCredits(int? multiplier)
+        public ActionResult UpdateCourseCredits(int multiplier)
         {
-            if (multiplier != null)
-            {
-                ViewBag.RowsAffected = db.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
-            }
+            foreach (var course in repository.GetCourses())
+                bus.Send(new UpdateCourseCredits { CourseId = course.CourseID, Credits = course.Credits * multiplier });
+
             return View();
         }
 

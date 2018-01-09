@@ -140,6 +140,10 @@
       <DependentUpon>201801091500573_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Data\Migrations\Configuration.cs" />
+    <Compile Include="Infrastructure\Messaging\IHandleMessages.cs" />
+    <Compile Include="Infrastructure\Messaging\IBus.cs" />
+    <Compile Include="Infrastructure\Messaging\Providers\InMemoryBus.cs" />
+    <Compile Include="Models\Commands\UpdateCourseCredits.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Enrollment.cs" />

@@ -35,6 +35,13 @@ namespace TutsUniversity.Models.Repositories.Providers
                 .ToList();
         }
 
+        public void Update(int courseId, int credits)
+        {
+            var course = GetCourse(courseId);
+            course.Credits = credits;
+            context.SaveChanges();
+        }
+
         public void Update(int courseId, string title, int credits, int departmentId)
         {
             var course = GetCourse(courseId);
