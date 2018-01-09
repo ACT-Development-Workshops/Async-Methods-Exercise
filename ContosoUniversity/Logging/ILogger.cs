@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ContosoUniversity.Logging
+namespace TutsUniversity.Logging
 {
     public interface ILogger
     {

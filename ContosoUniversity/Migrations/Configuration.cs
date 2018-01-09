@@ -1,13 +1,12 @@
-namespace ContosoUniversity.Migrations
-{
-    using ContosoUniversity.Models;
-    using ContosoUniversity.DAL;
-    using System;
-    using System.Collections.Generic;
-    using System.Data.Entity;
-    using System.Data.Entity.Migrations;
-    using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Linq;
+using TutsUniversity.DAL;
+using TutsUniversity.Models;
 
+namespace TutsUniversity.Migrations
+{
     internal sealed class Configuration : DbMigrationsConfiguration<SchoolContext>
     {
         public Configuration()

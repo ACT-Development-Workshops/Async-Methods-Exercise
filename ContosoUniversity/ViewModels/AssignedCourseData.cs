@@ -1,4 +1,4 @@
-﻿namespace ContosoUniversity.ViewModels
+﻿namespace TutsUniversity.ViewModels
 {
     public class AssignedCourseData
     {

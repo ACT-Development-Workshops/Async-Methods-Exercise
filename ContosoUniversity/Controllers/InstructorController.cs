@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ContosoUniversity.DAL;
-using ContosoUniversity.Models;
-using ContosoUniversity.ViewModels;
-using System.Data.Entity.Infrastructure;
+using TutsUniversity.DAL;
+using TutsUniversity.Models;
+using TutsUniversity.ViewModels;
 
-namespace ContosoUniversity.Controllers
+namespace TutsUniversity.Controllers
 {
     public class InstructorController : Controller
     {

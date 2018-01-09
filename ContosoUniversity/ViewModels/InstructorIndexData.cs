@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using ContosoUniversity.Models;
+using TutsUniversity.Models;
 
-namespace ContosoUniversity.ViewModels
+namespace TutsUniversity.ViewModels
 {
     public class InstructorIndexData
     {

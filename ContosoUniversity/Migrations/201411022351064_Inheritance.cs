@@ -1,9 +1,8 @@
-namespace ContosoUniversity.Migrations
+using System.Data.Entity.Migrations;
+using System.Diagnostics;
+
+namespace TutsUniversity.Migrations
 {
-    using System;
-    using System.Data.Entity.Migrations;
-    using System.Diagnostics;
-    
     public partial class Inheritance : DbMigration
     {
         public override void Up()
