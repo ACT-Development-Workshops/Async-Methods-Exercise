@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web.Mvc;
-using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Repositories;
 
@@ -9,7 +8,7 @@ namespace TutsUniversity.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
-        private TutsUniversityContext db = new TutsUniversityContext();
+        private readonly IInstructorRepository instructorRepository = RepositoryFactory.Instructors;
 
         public ActionResult Index()
         {
@@ -25,7 +24,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName");
+            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName");
             return View();
         }
 
@@ -39,14 +38,14 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", department.InstructorID);
             return View(department);
         }
 
         public ActionResult Edit(int id)
         {
             var department = departmentRepository.GetDepartment(id);
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", department.InstructorID);
             return View(department);
         }
 
@@ -60,7 +59,7 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
             
-            ViewBag.InstructorID = new SelectList(db.Instructors, "ID", "FullName", instructorId);
+            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", instructorId);
             return View(new Department { Budget = budget, DepartmentID = id, InstructorID = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
         }
 
