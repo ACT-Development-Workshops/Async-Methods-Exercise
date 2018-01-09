@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Infrastructure.Messaging.Providers;
 using TutsUniversity.Models;
@@ -13,21 +12,21 @@ namespace TutsUniversity.Controllers
     public class CourseController : Controller
     {
         private readonly IBus bus = new InMemoryBus();
-        private readonly ICourseRepository repository = new CourseRepository();
-        private TutsUniversityContext db = new TutsUniversityContext();
+        private readonly ICourseRepository courseRepository = new CourseRepository();
+        private readonly IDepartmentRepository departmentRepository = new DepartmentRepository();
 
         public ActionResult Index(int? departmentId)
         {
-            var departments = db.Departments.OrderBy(q => q.Name).ToList();
+            var departments = departmentRepository.GetDepartments();
             ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", departmentId);
 
-            var courses = repository.GetCourses(departmentId);
+            var courses = courseRepository.GetCourses(departmentId);
             return View(courses.ToList());
         }
 
         public ActionResult Details(int id)
         {
-            var course = db.Courses.Find(id);
+            var course = courseRepository.GetCourse(id);
             return View(course);
         }
 
@@ -43,7 +42,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                repository.Add(course);
+                courseRepository.Add(course);
                 return RedirectToAction("Index");
             }
 
@@ -53,7 +52,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Edit(int id)
         {
-            var course = repository.GetCourse(id);
+            var course = courseRepository.GetCourse(id);
             
             PopulateDepartmentsDropDownList(course.DepartmentID);
             return View(course);
@@ -65,7 +64,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                repository.Update(id, title, credits, departmentID);
+                courseRepository.Update(id, title, credits, departmentID);
                 return RedirectToAction("Index");
             }
 
@@ -73,17 +72,15 @@ namespace TutsUniversity.Controllers
             return View(new Course { CourseID = id, Credits = credits, DepartmentID = departmentID, Title = title });
         }
 
-        private void PopulateDepartmentsDropDownList(object selectedDepartment = null)
+        private void PopulateDepartmentsDropDownList(int? selectedDepartment = null)
         {
-            var departmentsQuery = from d in db.Departments
-                                   orderby d.Name
-                                   select d;
+            var departmentsQuery = departmentRepository.GetDepartments();
             ViewBag.DepartmentID = new SelectList(departmentsQuery, "DepartmentID", "Name", selectedDepartment);
         }
 
         public ActionResult Delete(int id)
         {
-            var course = repository.GetCourse(id);
+            var course = courseRepository.GetCourse(id);
             return View(course);
         }
 
@@ -91,7 +88,7 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            repository.Delete(id);
+            courseRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -103,7 +100,7 @@ namespace TutsUniversity.Controllers
         [HttpPost]
         public ActionResult UpdateCourseCredits(int multiplier)
         {
-            foreach (var course in repository.GetCourses())
+            foreach (var course in courseRepository.GetCourses())
                 bus.Send(new UpdateCourseCredits { CourseId = course.CourseID, Credits = course.Credits * multiplier });
 
             return View();
@@ -112,7 +109,10 @@ namespace TutsUniversity.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-                repository.Dispose();
+            {
+                courseRepository.Dispose();
+                departmentRepository.Dispose();
+            }
 
             base.Dispose(disposing);
         }
