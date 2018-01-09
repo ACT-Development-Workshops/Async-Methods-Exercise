@@ -14,7 +14,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Index(int? id, int? courseID)
         {
-            var viewModel = new InstructorIndex();
+            var viewModel = new InstructorList();
             viewModel.Instructors = instructorRepository.GetInstructors();
 
             if (id != null)
