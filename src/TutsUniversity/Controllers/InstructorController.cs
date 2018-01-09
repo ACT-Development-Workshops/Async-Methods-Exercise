@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Data;
 using TutsUniversity.Models;
@@ -15,7 +13,6 @@ namespace TutsUniversity.Controllers
     {
         private TutsUniversityContext db = new TutsUniversityContext();
 
-        // GET: Instructor
         public ActionResult Index(int? id, int? courseID)
         {
             var viewModel = new InstructorIndexData();
@@ -52,19 +49,9 @@ namespace TutsUniversity.Controllers
             return View(viewModel);
         }
 
-
-        // GET: Instructor/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Instructor instructor = db.Instructors.Find(id);
-            if (instructor == null)
-            {
-                return HttpNotFound();
-            }
+            var instructor = db.Instructors.Find(id);
             return View(instructor);
         }
 
@@ -89,34 +76,27 @@ namespace TutsUniversity.Controllers
                     instructor.Courses.Add(courseToAdd);
                 }
             }
+
             if (ModelState.IsValid)
             {
                 db.Instructors.Add(instructor);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+
             PopulateAssignedCourseData(instructor);
             return View(instructor);
         }
 
-
-        // GET: Instructor/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Instructor instructor = db.Instructors
+            var instructor = db.Instructors
                 .Include(i => i.OfficeAssignment)
                 .Include(i => i.Courses)
-                .Where(i => i.ID == id)
-                .Single();
+                .Single(i => i.ID == id);
+
             PopulateAssignedCourseData(instructor);
-            if (instructor == null)
-            {
-                return HttpNotFound();
-            }
+            
             return View(instructor);
         }
 
@@ -136,48 +116,32 @@ namespace TutsUniversity.Controllers
             }
             ViewBag.Courses = viewModel;
         }
-        // POST: Instructor/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int? id, string[] selectedCourses)
+        public ActionResult Edit(int id, string[] selectedCourses)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var instructorToUpdate = db.Instructors
                .Include(i => i.OfficeAssignment)
                .Include(i => i.Courses)
-               .Where(i => i.ID == id)
-               .Single();
+               .Single(i => i.ID == id);
 
-            if (TryUpdateModel(instructorToUpdate, "",
-               new string[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
+            if (TryUpdateModel(instructorToUpdate, "", new string[] { "LastName", "FirstMidName", "HireDate", "OfficeAssignment" }))
             {
-                try
-                {
-                    if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment.Location))
-                    {
-                        instructorToUpdate.OfficeAssignment = null;
-                    }
+                if (String.IsNullOrWhiteSpace(instructorToUpdate.OfficeAssignment.Location))
+                    instructorToUpdate.OfficeAssignment = null;
 
-                    UpdateInstructorCourses(selectedCourses, instructorToUpdate);
+                UpdateInstructorCourses(selectedCourses, instructorToUpdate);
 
-                    db.SaveChanges();
+                db.SaveChanges();
 
-                    return RedirectToAction("Index");
-                }
-                catch (RetryLimitExceededException /* dex */)
-                {
-                    //Log the error (uncomment dex variable name and add a line here to write a log.
-                    ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-                }
+                return RedirectToAction("Index");
             }
+
             PopulateAssignedCourseData(instructorToUpdate);
             return View(instructorToUpdate);
         }
+
         private void UpdateInstructorCourses(string[] selectedCourses, Instructor instructorToUpdate)
         {
             if (selectedCourses == null)
@@ -187,74 +151,53 @@ namespace TutsUniversity.Controllers
             }
 
             var selectedCoursesHS = new HashSet<string>(selectedCourses);
-            var instructorCourses = new HashSet<int>
-                (instructorToUpdate.Courses.Select(c => c.CourseID));
+            var instructorCourses = new HashSet<int>(instructorToUpdate.Courses.Select(c => c.CourseID));
+
             foreach (var course in db.Courses)
             {
                 if (selectedCoursesHS.Contains(course.CourseID.ToString()))
                 {
                     if (!instructorCourses.Contains(course.CourseID))
-                    {
                         instructorToUpdate.Courses.Add(course);
-                    }
                 }
                 else
                 {
                     if (instructorCourses.Contains(course.CourseID))
-                    {
                         instructorToUpdate.Courses.Remove(course);
-                    }
                 }
             }
         }
 
-
-
-        // GET: Instructor/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Instructor instructor = db.Instructors.Find(id);
-            if (instructor == null)
-            {
-                return HttpNotFound();
-            }
+            var instructor = db.Instructors.Find(id);
             return View(instructor);
         }
 
-        // POST: Instructor/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Instructor instructor = db.Instructors
+            var instructor = db.Instructors
               .Include(i => i.OfficeAssignment)
-              .Where(i => i.ID == id)
-              .Single();
+              .Single(i => i.ID == id);
 
             instructor.OfficeAssignment = null;
             db.Instructors.Remove(instructor);
 
-            var department = db.Departments
-                .Where(d => d.InstructorID == id)
-                .SingleOrDefault();
+            var department = db.Departments.SingleOrDefault(d => d.InstructorID == id);
             if (department != null)
-            {
                 department.InstructorID = null;
-            }
 
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }
