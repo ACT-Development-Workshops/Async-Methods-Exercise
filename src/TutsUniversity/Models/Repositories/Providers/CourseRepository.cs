@@ -53,6 +53,6 @@ namespace TutsUniversity.Models.Repositories.Providers
             context.SaveChanges();
         }
 
-        public void Dispose() => context?.Dispose();
+        public void Dispose() => context.Dispose();
     }
 }
