@@ -133,13 +133,9 @@
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="DAL\SchoolConfiguration.cs" />
     <Compile Include="DAL\SchoolContext.cs" />
-    <Compile Include="DAL\SchoolInterceptorLogging.cs" />
-    <Compile Include="DAL\SchoolInterceptorTransientErrors.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Migrations\201801091500573_Initial.cs" />
     <Compile Include="Migrations\201801091500573_Initial.Designer.cs">
       <DependentUpon>201801091500573_Initial.cs</DependentUpon>

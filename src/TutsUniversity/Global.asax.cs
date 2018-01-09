@@ -1,8 +1,6 @@
-﻿using System.Data.Entity.Infrastructure.Interception;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using TutsUniversity.DAL;
 
 namespace TutsUniversity
 {
@@ -14,8 +12,6 @@ namespace TutsUniversity
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            DbInterception.Add(new SchoolInterceptorTransientErrors());
-            DbInterception.Add(new SchoolInterceptorLogging());
         }
     }
 }
