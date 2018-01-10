@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TutsUniversity.Models
 {
-    public class Department
+    public partial class Department
     {
         public int Id { get; set; }
 

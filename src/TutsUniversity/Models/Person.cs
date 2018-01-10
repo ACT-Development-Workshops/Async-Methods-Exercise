@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TutsUniversity.Models
 {
-    public abstract class Person
+    public abstract partial class Person
     {
         public int Id { get; set; }
 

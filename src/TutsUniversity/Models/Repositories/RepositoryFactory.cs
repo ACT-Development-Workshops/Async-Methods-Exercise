@@ -11,5 +11,7 @@ namespace TutsUniversity.Models.Repositories
         public static IInstructorRepository Instructors = new InstructorRepository();
 
         public static IStudentRepository Students = new StudentRepository();
+
+        public static IUpdateRepository Updates = new UpdateRepository();
     }
 }
