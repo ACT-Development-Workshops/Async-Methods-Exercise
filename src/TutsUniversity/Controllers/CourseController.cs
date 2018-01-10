@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Commands;
@@ -18,19 +17,17 @@ namespace TutsUniversity.Controllers
             var departments = departmentRepository.GetDepartments();
             ViewBag.SelectedDepartment = new SelectList(departments, "Id", "Name", departmentId);
 
-            var courses = courseRepository.GetCourses(departmentId);
-            return View(courses.ToList());
+            return View(courseRepository.GetCourses(departmentId));
         }
 
         public ActionResult Details(int id)
         {
-            var course = courseRepository.GetCourse(id);
-            return View(course);
+            return View(courseRepository.GetCourse(id));
         }
 
         public ActionResult Create()
         {
-            PopulateDepartmentsDropDownList();
+            ListDepartments();
             return View();
         }
 
@@ -44,15 +41,14 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            PopulateDepartmentsDropDownList(course.DepartmentId);
+            ListDepartments(course.DepartmentId);
             return View(course);
         }
 
         public ActionResult Edit(int id)
         {
             var course = courseRepository.GetCourse(id);
-            
-            PopulateDepartmentsDropDownList(course.DepartmentId);
+            ListDepartments(course.DepartmentId);
             return View(course);
         }
 
@@ -66,20 +62,13 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            PopulateDepartmentsDropDownList(departmentId);
+            ListDepartments(departmentId);
             return View(new Course { Id = id, Credits = credits, DepartmentId = departmentId, Title = title });
-        }
-
-        private void PopulateDepartmentsDropDownList(int? selectedDepartment = null)
-        {
-            var departmentsQuery = departmentRepository.GetDepartments();
-            ViewBag.DepartmentId = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
         }
 
         public ActionResult Delete(int id)
         {
-            var course = courseRepository.GetCourse(id);
-            return View(course);
+            return View(courseRepository.GetCourse(id));
         }
 
         [HttpPost, ActionName("Delete")]
@@ -100,6 +89,12 @@ namespace TutsUniversity.Controllers
         {
             bus.Send(new MultiplyCourseCredits { Multiplier = multiplier });
             return View();
+        }
+
+        private void ListDepartments(int? selectedDepartment = null)
+        {
+            var departmentsQuery = departmentRepository.GetDepartments();
+            ViewBag.DepartmentId = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
         }
 
         protected override void Dispose(bool disposing)
