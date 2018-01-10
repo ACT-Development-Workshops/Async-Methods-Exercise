@@ -12,14 +12,12 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Index()
         {
-            var departments = departmentRepository.GetDepartments();
-            return View(departments);
+            return View(departmentRepository.GetDepartments());
         }
 
         public ActionResult Details(int id)
         {
-            var department = departmentRepository.GetDepartment(id);
-            return View(department);
+            return View(departmentRepository.GetDepartment(id));
         }
 
         public ActionResult Create()
@@ -65,8 +63,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Delete(int id)
         {
-            var department = departmentRepository.GetDepartment(id);
-            return View(department);
+            return View(departmentRepository.GetDepartment(id));
         }
 
         [HttpPost]
@@ -80,7 +77,10 @@ namespace TutsUniversity.Controllers
         protected override void Dispose(bool disposing)
         {
             if (disposing)
+            {
                 departmentRepository.Dispose();
+                instructorRepository.Dispose();
+            }
 
             base.Dispose(disposing);
         }
