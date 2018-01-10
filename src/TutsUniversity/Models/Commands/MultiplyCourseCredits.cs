@@ -16,7 +16,7 @@ namespace TutsUniversity.Models.Commands
             public void Handle(MultiplyCourseCredits message)
             {
                 foreach (var course in courseRepository.GetCourses())
-                    bus.Send(new UpdateCourseCredits { CourseId = course.CourseID, Credits = course.Credits * message.Multiplier });
+                    bus.Send(new UpdateCourseCredits { CourseId = course.Id, Credits = course.Credits * message.Multiplier });
             }
 
             public void Dispose() => courseRepository.Dispose();

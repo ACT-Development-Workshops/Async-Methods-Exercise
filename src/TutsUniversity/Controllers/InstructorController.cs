@@ -12,21 +12,21 @@ namespace TutsUniversity.Controllers
         private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
         private readonly IInstructorRepository instructorRepository = RepositoryFactory.Instructors;
 
-        public ActionResult Index(int? id, int? courseID)
+        public ActionResult Index(int? id, int? courseId)
         {
             var viewModel = new InstructorList();
             viewModel.Instructors = instructorRepository.GetInstructors();
 
             if (id != null)
             {
-                ViewBag.InstructorID = id.Value;
-                viewModel.Courses = viewModel.Instructors.Single(i => i.ID == id.Value).Courses;
+                ViewBag.InstructorId = id.Value;
+                viewModel.Courses = viewModel.Instructors.Single(i => i.Id == id.Value).Courses;
             }
 
-            if (courseID != null)
+            if (courseId != null)
             {
-                ViewBag.CourseID = courseID.Value;
-                viewModel.Enrollments = viewModel.Courses.Single(x => x.CourseID == courseID).Enrollments;
+                ViewBag.CourseId = courseId.Value;
+                viewModel.Enrollments = viewModel.Courses.Single(x => x.Id == courseId).Enrollments;
             }
 
             return View(viewModel);
@@ -106,9 +106,9 @@ namespace TutsUniversity.Controllers
                 .GetCourses()
                 .Select(course => new AssignableCourse
                 {
-                    CourseID = course.CourseID,
+                    CourseId = course.Id,
                     Title = course.Title,
-                    Assigned = currentlyAssignedCourses.Select(c => c.CourseID).Contains(course.CourseID)
+                    Assigned = currentlyAssignedCourses.Select(c => c.Id).Contains(course.Id)
                 })
                 .ToList();
         }

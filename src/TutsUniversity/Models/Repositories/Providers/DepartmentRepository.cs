@@ -23,7 +23,7 @@ namespace TutsUniversity.Models.Repositories.Providers
 
         public Department GetDepartment(int departmentId)
         {
-            return context.Departments.Single(d => d.DepartmentID == departmentId);
+            return context.Departments.Single(d => d.Id == departmentId);
         }
 
         public IEnumerable<Department> GetDepartments()
@@ -36,7 +36,7 @@ namespace TutsUniversity.Models.Repositories.Providers
             var department = GetDepartment(id);
 
             department.Budget = budget;
-            department.InstructorID = instructorId;
+            department.InstructorId = instructorId;
             department.Name = name;
             department.RowVersion = version;
             department.StartDate = startDate;

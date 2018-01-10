@@ -23,14 +23,14 @@ namespace TutsUniversity.Models.Repositories.Providers
 
         public Course GetCourse(int id)
         {
-            return context.Courses.Single(c => c.CourseID == id);
+            return context.Courses.Single(c => c.Id == id);
         }
 
         public IEnumerable<Course> GetCourses(int? departmentId)
         {
             return context.Courses
-                .Where(c => !departmentId.HasValue || c.DepartmentID == departmentId)
-                .OrderBy(d => d.CourseID)
+                .Where(c => !departmentId.HasValue || c.DepartmentId == departmentId)
+                .OrderBy(d => d.Id)
                 .Include(d => d.Department)
                 .ToList();
         }
@@ -48,7 +48,7 @@ namespace TutsUniversity.Models.Repositories.Providers
 
             course.Title = title;
             course.Credits = credits;
-            course.DepartmentID = departmentId;
+            course.DepartmentId = departmentId;
 
             context.SaveChanges();
         }

@@ -23,9 +23,9 @@ namespace TutsUniversity.Models.Repositories.Providers
             instructor.OfficeAssignment = null;
             context.Instructors.Remove(instructor);
 
-            var department = context.Departments.SingleOrDefault(d => d.InstructorID == instructorId);
+            var department = context.Departments.SingleOrDefault(d => d.InstructorId == instructorId);
             if (department != null)
-                department.InstructorID = null;
+                department.InstructorId = null;
 
             context.SaveChanges();
         }
@@ -35,7 +35,7 @@ namespace TutsUniversity.Models.Repositories.Providers
             return context.Instructors
                 .Include(i => i.OfficeAssignment)
                 .Include(i => i.Courses)
-                .Single(i => i.ID == instructorId);
+                .Single(i => i.Id == instructorId);
         }
 
         public IEnumerable<Instructor> GetInstructors()
@@ -66,19 +66,19 @@ namespace TutsUniversity.Models.Repositories.Providers
                 }
 
                 var currentCourseIds = instructor.Courses
-                    .Select(c => c.CourseID)
+                    .Select(c => c.Id)
                     .ToList();
 
                 foreach (var course in context.Courses)
                 {
-                    if (selectedCourseIds.Contains(course.CourseID))
+                    if (selectedCourseIds.Contains(course.Id))
                     {
-                        if (!currentCourseIds.Contains(course.CourseID))
+                        if (!currentCourseIds.Contains(course.Id))
                             instructor.Courses.Add(course);
                     }
                     else
                     {
-                        if (currentCourseIds.Contains(course.CourseID))
+                        if (currentCourseIds.Contains(course.Id))
                             instructor.Courses.Remove(course);
                     }
                 }

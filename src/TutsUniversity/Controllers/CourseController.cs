@@ -16,7 +16,7 @@ namespace TutsUniversity.Controllers
         public ActionResult Index(int? departmentId)
         {
             var departments = departmentRepository.GetDepartments();
-            ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", departmentId);
+            ViewBag.SelectedDepartment = new SelectList(departments, "Id", "Name", departmentId);
 
             var courses = courseRepository.GetCourses(departmentId);
             return View(courses.ToList());
@@ -36,7 +36,7 @@ namespace TutsUniversity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseID,Title,Credits,DepartmentID")]Course course)
+        public ActionResult Create([Bind(Include = "Id,Title,Credits,DepartmentId")]Course course)
         {
             if (ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
@@ -52,28 +52,28 @@ namespace TutsUniversity.Controllers
         {
             var course = courseRepository.GetCourse(id);
             
-            PopulateDepartmentsDropDownList(course.DepartmentID);
+            PopulateDepartmentsDropDownList(course.DepartmentId);
             return View(course);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int id, string title, int credits, int departmentID)
+        public ActionResult EditPost(int id, string title, int credits, int departmentId)
         {
             if (ModelState.IsValid)
             {
-                courseRepository.Update(id, title, credits, departmentID);
+                courseRepository.Update(id, title, credits, departmentId);
                 return RedirectToAction("Index");
             }
 
-            PopulateDepartmentsDropDownList(departmentID);
-            return View(new Course { CourseID = id, Credits = credits, DepartmentID = departmentID, Title = title });
+            PopulateDepartmentsDropDownList(departmentId);
+            return View(new Course { Id = id, Credits = credits, DepartmentId = departmentId, Title = title });
         }
 
         private void PopulateDepartmentsDropDownList(int? selectedDepartment = null)
         {
             var departmentsQuery = departmentRepository.GetDepartments();
-            ViewBag.DepartmentID = new SelectList(departmentsQuery, "DepartmentID", "Name", selectedDepartment);
+            ViewBag.DepartmentId = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
         }
 
         public ActionResult Delete(int id)

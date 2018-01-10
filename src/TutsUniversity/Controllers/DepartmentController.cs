@@ -24,13 +24,13 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName");
+            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "DepartmentID,Name,Budget,StartDate,InstructorID")] Department department)
+        public ActionResult Create([Bind(Include = "Id,Name,Budget,StartDate,InstructorId")] Department department)
         {
             if (ModelState.IsValid)
             {
@@ -38,14 +38,14 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", department.InstructorId);
             return View(department);
         }
 
         public ActionResult Edit(int id)
         {
             var department = departmentRepository.GetDepartment(id);
-            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", department.InstructorID);
+            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", department.InstructorId);
             return View(department);
         }
 
@@ -59,8 +59,8 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
             
-            ViewBag.InstructorID = new SelectList(instructorRepository.GetInstructors(), "ID", "FullName", instructorId);
-            return View(new Department { Budget = budget, DepartmentID = id, InstructorID = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
+            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", instructorId);
+            return View(new Department { Budget = budget, Id = id, InstructorId = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
         }
 
         public ActionResult Delete(int id)
@@ -73,7 +73,7 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(Department department)
         {
-            departmentRepository.Delete(department.DepartmentID);
+            departmentRepository.Delete(department.Id);
             return RedirectToAction("Index");
         }
 

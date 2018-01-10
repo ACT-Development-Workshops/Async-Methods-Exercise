@@ -50,7 +50,7 @@
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
-        @Html.HiddenFor(model => model.DepartmentID)
+        @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.RowVersion)
 
         <div class="form-actions no-color">

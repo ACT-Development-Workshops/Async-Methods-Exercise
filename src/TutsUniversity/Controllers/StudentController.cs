@@ -103,7 +103,7 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(new Student{ EnrollmentDate = enrollmentDate, FirstMidName = firstMidName, ID = id, LastName = lastName});
+            return View(new Student{ EnrollmentDate = enrollmentDate, FirstMidName = firstMidName, Id = id, LastName = lastName});
         }
 
         public ActionResult Delete(int id)

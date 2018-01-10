@@ -36,7 +36,7 @@ namespace TutsUniversity.Models.Repositories.Providers
 
         public Student GetStudent(int studentId)
         {
-            return context.Students.Single(s => s.ID == studentId);
+            return context.Students.Single(s => s.Id == studentId);
         }
 
         public IPagedList<Student> Search(StudentSearchOptions searchOptions)
