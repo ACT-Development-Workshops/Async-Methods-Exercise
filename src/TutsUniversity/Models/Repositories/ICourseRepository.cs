@@ -6,10 +6,15 @@ namespace TutsUniversity.Models.Repositories
     public interface ICourseRepository : IDisposable
     {
         void Add(Course course);
-        void Delete(int id);
-        Course GetCourse(int id);
+
+        void Delete(int courseId);
+
+        Course GetCourse(int courseId);
+
         IEnumerable<Course> GetCourses(int? departmentId = null);
+
         void Update(int courseId, int credits);
+
         void Update(int courseId, string title, int credits, int departmentId);
     }
 }

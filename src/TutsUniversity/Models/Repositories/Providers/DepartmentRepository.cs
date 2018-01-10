@@ -28,12 +28,12 @@ namespace TutsUniversity.Models.Repositories.Providers
 
         public IEnumerable<Department> GetDepartments()
         {
-            return context.Departments.OrderBy(q => q.Name).ToList();
+            return context.Departments.OrderBy(d => d.Name).ToList();
         }
 
-        public void Update(int id, string name, decimal budget, DateTime startDate, int instructorId, byte[] version)
+        public void Update(int departmentId, string name, decimal budget, DateTime startDate, int instructorId, byte[] version)
         {
-            var department = GetDepartment(id);
+            var department = GetDepartment(departmentId);
 
             department.Budget = budget;
             department.InstructorId = instructorId;

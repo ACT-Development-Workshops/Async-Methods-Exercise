@@ -15,15 +15,15 @@ namespace TutsUniversity.Models.Repositories.Providers
             context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(int courseId)
         {
-            context.Courses.Remove(GetCourse(id));
+            context.Courses.Remove(GetCourse(courseId));
             context.SaveChanges();
         }
 
-        public Course GetCourse(int id)
+        public Course GetCourse(int courseId)
         {
-            return context.Courses.Single(c => c.Id == id);
+            return context.Courses.Single(c => c.Id == courseId);
         }
 
         public IEnumerable<Course> GetCourses(int? departmentId)
