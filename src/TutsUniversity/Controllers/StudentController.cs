@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Web.Mvc;
+using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models;
+using TutsUniversity.Models.Commands;
 using TutsUniversity.Models.Repositories;
 
 namespace TutsUniversity.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly Bus bus = Bus.Instance;
         private readonly IStudentRepository studentRepository = RepositoryFactory.Students;
 
         public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -78,9 +81,10 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "LastName, FirstMidName, EnrollmentDate")]Student student)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 studentRepository.Add(student);
+                bus.Send(new ScheduleOrientation { StudentId = student.Id, FullName = student.FullName });
                 return RedirectToAction("Index");
             }
 

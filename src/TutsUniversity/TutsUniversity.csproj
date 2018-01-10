@@ -149,6 +149,7 @@
     <Compile Include="Infrastructure\Messaging\Providers\InMemoryBus.cs" />
     <Compile Include="Infrastructure\TaskExtensions.cs" />
     <Compile Include="Models\Commands\MultiplyCourseCredits.cs" />
+    <Compile Include="Models\Commands\ScheduleOrientation.cs" />
     <Compile Include="Models\Commands\UpdateCourseCredits.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Department.cs" />
