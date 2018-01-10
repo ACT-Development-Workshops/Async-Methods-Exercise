@@ -147,7 +147,7 @@
     <Compile Include="Infrastructure\Messaging\IHandleMessages.cs" />
     <Compile Include="Infrastructure\Messaging\Bus.cs" />
     <Compile Include="Infrastructure\Messaging\Providers\InMemoryBus.cs" />
-    <Compile Include="Infrastructure\Tasks\TaskExtensions.cs" />
+    <Compile Include="Infrastructure\TaskExtensions.cs" />
     <Compile Include="Models\Commands\MultiplyCourseCredits.cs" />
     <Compile Include="Models\Commands\UpdateCourseCredits.cs" />
     <Compile Include="Models\Course.cs" />
