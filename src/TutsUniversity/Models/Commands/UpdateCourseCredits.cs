@@ -7,6 +7,7 @@ namespace TutsUniversity.Models.Commands
     public class UpdateCourseCredits
     {
         public int CourseId { get; set; }
+
         public int Credits { get; set; }
 
         public class Handler : IHandleMessages<UpdateCourseCredits>, IDisposable
