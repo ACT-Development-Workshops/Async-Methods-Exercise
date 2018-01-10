@@ -14,8 +14,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult About()
         {
-            var studentBodyStatistics = studentRepository.GetDailyEnrollmentTotals();
-            return View(studentBodyStatistics);
+            return View(studentRepository.GetDailyEnrollmentTotals());
         }
 
         public ActionResult Contact()
