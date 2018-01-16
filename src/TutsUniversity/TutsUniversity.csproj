@@ -135,9 +135,9 @@
     <Compile Include="Infrastructure\Auditing\UpdatableConventions.cs" />
     <Compile Include="Infrastructure\Auditing\IUpdatable.cs" />
     <Compile Include="Infrastructure\Auditing\UpdateContext.cs" />
-    <Compile Include="Infrastructure\Data\Migrations\201801161552190_Initial.cs" />
-    <Compile Include="Infrastructure\Data\Migrations\201801161552190_Initial.Designer.cs">
-      <DependentUpon>201801161552190_Initial.cs</DependentUpon>
+    <Compile Include="Infrastructure\Data\Migrations\201801161600035_Initial.cs" />
+    <Compile Include="Infrastructure\Data\Migrations\201801161600035_Initial.Designer.cs">
+      <DependentUpon>201801161600035_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Data\TutsUniversityContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -243,8 +243,8 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Infrastructure\Data\Migrations\201801161552190_Initial.resx">
-      <DependentUpon>201801161552190_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Infrastructure\Data\Migrations\201801161600035_Initial.resx">
+      <DependentUpon>201801161600035_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

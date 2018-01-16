@@ -13,7 +13,7 @@ namespace TutsUniversity.Infrastructure.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201801161552190_Initial"; }
+            get { return "201801161600035_Initial"; }
         }
         
         string IMigrationMetadata.Source

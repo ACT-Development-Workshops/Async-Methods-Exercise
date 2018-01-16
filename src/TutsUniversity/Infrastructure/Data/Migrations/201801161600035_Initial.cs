@@ -26,7 +26,7 @@ namespace TutsUniversity.Infrastructure.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(maxLength: 50),
+                        Name = c.String(nullable: false, maxLength: 50),
                         Budget = c.Decimal(nullable: false, storeType: "money"),
                         StartDate = c.DateTime(nullable: false),
                         InstructorId = c.Int(),
