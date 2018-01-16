@@ -56,14 +56,8 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int id, string title, int credits, int departmentId)
         {
-            if (ModelState.IsValid)
-            {
-                courseRepository.Update(id, title, credits, departmentId);
-                return RedirectToAction("Index");
-            }
-
-            ListDepartments(departmentId);
-            return View(new Course { Id = id, Credits = credits, DepartmentId = departmentId, Title = title });
+            courseRepository.Update(id, title, credits, departmentId);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int id)

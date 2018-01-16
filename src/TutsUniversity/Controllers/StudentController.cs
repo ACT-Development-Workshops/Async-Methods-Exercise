@@ -101,13 +101,8 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult EditPost(int id, string lastName, string firstMidName, DateTime enrollmentDate)
         {
-            if (ModelState.IsValid)
-            {
-                studentRepository.Update(id, lastName, firstMidName, enrollmentDate);
-                return RedirectToAction("Index");
-            }
-
-            return View(new Student{ EnrollmentDate = enrollmentDate, FirstMidName = firstMidName, Id = id, LastName = lastName});
+            studentRepository.Update(id, lastName, firstMidName, enrollmentDate);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int id)

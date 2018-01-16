@@ -75,15 +75,8 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, string lastName, string firstMidName, DateTime hireDate, OfficeAssignment officeAssignment, string[] selectedCourses)
         {
-            if (ModelState.IsValid)
-            {
-                instructorRepository.Update(id, lastName, firstMidName, hireDate, officeAssignment.Location, selectedCourses?.Select(int.Parse).ToArray());
-                return RedirectToAction("Index");
-            }
-
-            var instructor = instructorRepository.GetInstructor(id);
-            ListAssignableCourses(instructor.Courses);
-            return View(instructor);
+            instructorRepository.Update(id, lastName, firstMidName, hireDate, officeAssignment.Location, selectedCourses?.Select(int.Parse).ToArray());
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int id)

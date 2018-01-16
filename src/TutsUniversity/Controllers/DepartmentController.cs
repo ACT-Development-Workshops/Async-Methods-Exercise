@@ -51,14 +51,8 @@ namespace TutsUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, string name, decimal budget, DateTime startDate, int? instructorId, byte[] rowVersion)
         {
-            if (ModelState.IsValid)
-            {
-                departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
-                return RedirectToAction("Index");
-            }
-
-            ListInstructors(instructorId);
-            return View(new Department { Budget = budget, Id = id, InstructorId = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
+            departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
+            return RedirectToAction("Index");
         }
 
         public ActionResult Delete(int id)
