@@ -22,7 +22,7 @@ namespace TutsUniversity.Controllers
 
         public ActionResult Create()
         {
-            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName");
+            ListInstructors();
             return View();
         }
 
@@ -36,28 +36,28 @@ namespace TutsUniversity.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", department.InstructorId);
+            ListInstructors(department.InstructorId);
             return View(department);
         }
 
         public ActionResult Edit(int id)
         {
             var department = departmentRepository.GetDepartment(id);
-            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", department.InstructorId);
+            ListInstructors(department.InstructorId);
             return View(department);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string name, decimal budget, DateTime startDate, int instructorId, byte[] rowVersion)
+        public ActionResult Edit(int id, string name, decimal budget, DateTime startDate, int? instructorId, byte[] rowVersion)
         {
             if (ModelState.IsValid)
             {
                 departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
                 return RedirectToAction("Index");
             }
-            
-            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", instructorId);
+
+            ListInstructors(instructorId);
             return View(new Department { Budget = budget, Id = id, InstructorId = instructorId, Name = name, RowVersion = rowVersion, StartDate = startDate });
         }
 
@@ -72,6 +72,11 @@ namespace TutsUniversity.Controllers
         {
             departmentRepository.Delete(department.Id);
             return RedirectToAction("Index");
+        }
+
+        private void ListInstructors(int? currentInstructorId = null)
+        {
+            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", currentInstructorId);
         }
 
         protected override void Dispose(bool disposing)
