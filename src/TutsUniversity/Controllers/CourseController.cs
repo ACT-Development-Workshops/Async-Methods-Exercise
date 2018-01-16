@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Commands;
@@ -12,64 +13,64 @@ namespace TutsUniversity.Controllers
         private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
         private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
 
-        public ActionResult Index([Bind(Prefix = "SelectedDepartment")]int? selectedDepartmentId)
+        public async Task<ActionResult> Index([Bind(Prefix = "SelectedDepartment")]int? selectedDepartmentId)
         {
-            var departments = departmentRepository.GetDepartments();
+            var departments = await departmentRepository.GetDepartments();
             ViewBag.SelectedDepartment = new SelectList(departments, "Id", "Name", selectedDepartmentId);
 
-            return View(courseRepository.GetCourses(selectedDepartmentId));
+            return View(await courseRepository.GetCourses(selectedDepartmentId));
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View(courseRepository.GetCourse(id));
+            return View(await courseRepository.GetCourse(id));
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ListDepartments();
+            await ListDepartments();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Credits,DepartmentId")]Course course)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Title,Credits,DepartmentId")]Course course)
         {
             if (ModelState.IsValid)
             {
-                courseRepository.Add(course);
+                await courseRepository.Add(course);
                 return RedirectToAction("Index");
             }
 
-            ListDepartments(course.DepartmentId);
+            await ListDepartments(course.DepartmentId);
             return View(course);
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var course = courseRepository.GetCourse(id);
-            ListDepartments(course.DepartmentId);
+            var course = await courseRepository.GetCourse(id);
+            await ListDepartments(course.DepartmentId);
             return View(course);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int id, string title, int credits, int departmentId)
+        public async Task<ActionResult> EditPost(int id, string title, int credits, int departmentId)
         {
-            courseRepository.Update(id, title, credits, departmentId);
+            await courseRepository.Update(id, title, credits, departmentId);
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View(courseRepository.GetCourse(id));
+            return View(await courseRepository.GetCourse(id));
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            courseRepository.Delete(id);
+            await courseRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
@@ -79,15 +80,15 @@ namespace TutsUniversity.Controllers
         }
 
         [HttpPost]
-        public ActionResult UpdateCourseCredits(int multiplier)
+        public async Task<ActionResult> UpdateCourseCredits(int multiplier)
         {
-            bus.Send(new MultiplyCourseCredits { Multiplier = multiplier });
+            await bus.Send(new MultiplyCourseCredits { Multiplier = multiplier });
             return RedirectToAction("Index");
         }
 
-        private void ListDepartments(int? selectedDepartment = null)
+        private async Task ListDepartments(int? selectedDepartment = null)
         {
-            var departmentsQuery = departmentRepository.GetDepartments();
+            var departmentsQuery = await departmentRepository.GetDepartments();
             ViewBag.DepartmentId = new SelectList(departmentsQuery, "Id", "Name", selectedDepartment);
         }
 

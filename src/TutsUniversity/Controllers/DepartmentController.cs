@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Repositories;
@@ -10,67 +11,67 @@ namespace TutsUniversity.Controllers
         private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
         private readonly IInstructorRepository instructorRepository = RepositoryFactory.Instructors;
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View(departmentRepository.GetDepartments());
+            return View(await departmentRepository.GetDepartments());
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View(departmentRepository.GetDepartment(id));
+            return View(await departmentRepository.GetDepartment(id));
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ListInstructors();
+            await ListInstructors();
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Budget,StartDate,InstructorId")] Department department)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,Budget,StartDate,InstructorId")] Department department)
         {
             if (ModelState.IsValid)
             {
-                departmentRepository.Add(department);
+                await departmentRepository.Add(department);
                 return RedirectToAction("Index");
             }
 
-            ListInstructors(department.InstructorId);
+            await ListInstructors(department.InstructorId);
             return View(department);
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var department = departmentRepository.GetDepartment(id);
-            ListInstructors(department.InstructorId);
+            var department = await departmentRepository.GetDepartment(id);
+            await ListInstructors(department.InstructorId);
             return View(department);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string name, decimal budget, DateTime startDate, int? instructorId, byte[] rowVersion)
+        public async Task<ActionResult> Edit(int id, string name, decimal budget, DateTime startDate, int? instructorId, byte[] rowVersion)
         {
-            departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
+            await departmentRepository.Update(id, name, budget, startDate, instructorId, rowVersion);
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            return View(departmentRepository.GetDepartment(id));
+            return View(await departmentRepository.GetDepartment(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(Department department)
+        public async Task<ActionResult> Delete(Department department)
         {
-            departmentRepository.Delete(department.Id);
+            await departmentRepository.Delete(department.Id);
             return RedirectToAction("Index");
         }
 
-        private void ListInstructors(int? currentInstructorId = null)
+        private async Task ListInstructors(int? currentInstructorId = null)
         {
-            ViewBag.InstructorId = new SelectList(instructorRepository.GetInstructors(), "Id", "FullName", currentInstructorId);
+            ViewBag.InstructorId = new SelectList(await instructorRepository.GetInstructors(), "Id", "FullName", currentInstructorId);
         }
 
         protected override void Dispose(bool disposing)

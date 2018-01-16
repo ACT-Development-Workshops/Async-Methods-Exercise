@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using TutsUniversity.Models.Repositories;
 
 namespace TutsUniversity.Controllers
@@ -12,9 +13,9 @@ namespace TutsUniversity.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public async Task<ActionResult> About()
         {
-            return View(studentRepository.GetDailyEnrollmentTotals());
+            return View(await studentRepository.GetDailyEnrollmentTotals());
         }
 
         public ActionResult Contact()

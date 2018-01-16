@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models;
@@ -12,7 +13,7 @@ namespace TutsUniversity.Controllers
         private readonly Bus bus = Bus.Instance;
         private readonly IStudentRepository studentRepository = RepositoryFactory.Students;
 
-        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<ViewResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             var searchOptions = new StudentSearchOptions();
 
@@ -20,7 +21,7 @@ namespace TutsUniversity.Controllers
             ConfigureSortOrder();
             ConfigurePaging();
 
-            return View(studentRepository.Search(searchOptions));
+            return View(await studentRepository.Search(searchOptions));
 
             void ConfigureFilter()
             {
@@ -66,9 +67,9 @@ namespace TutsUniversity.Controllers
             }
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            var student = studentRepository.GetStudent(id);
+            var student = await studentRepository.GetStudent(id);
             return View(student);
         }
 
@@ -79,43 +80,43 @@ namespace TutsUniversity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName, FirstMidName, EnrollmentDate")]Student student)
+        public async Task<ActionResult> Create([Bind(Include = "LastName, FirstMidName, EnrollmentDate")]Student student)
         {
             if (ModelState.IsValid)
             {
-                studentRepository.Add(student);
-                bus.Send(new ScheduleOrientation { StudentId = student.Id, FullName = student.FullName });
+                await studentRepository.Add(student);
+                await bus.Send(new ScheduleOrientation { StudentId = student.Id, FullName = student.FullName });
                 return RedirectToAction("Index");
             }
 
             return View(student);
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var student = studentRepository.GetStudent(id);
+            var student = await studentRepository.GetStudent(id);
             return View(student);
         }
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int id, string lastName, string firstMidName, DateTime enrollmentDate)
+        public async Task<ActionResult> EditPost(int id, string lastName, string firstMidName, DateTime enrollmentDate)
         {
-            studentRepository.Update(id, lastName, firstMidName, enrollmentDate);
+            await studentRepository.Update(id, lastName, firstMidName, enrollmentDate);
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var student = studentRepository.GetStudent(id);
+            var student = await studentRepository.GetStudent(id);
             return View(student);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            studentRepository.Delete(id);
+            await studentRepository.Delete(id);
             return RedirectToAction("Index");
         }
 

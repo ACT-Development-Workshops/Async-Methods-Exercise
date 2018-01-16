@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using TutsUniversity.Models;
 using TutsUniversity.Models.Repositories;
@@ -12,10 +13,10 @@ namespace TutsUniversity.Controllers
         private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
         private readonly IInstructorRepository instructorRepository = RepositoryFactory.Instructors;
 
-        public ActionResult Index(int? id, int? courseId)
+        public async Task<ActionResult> Index(int? id, int? courseId)
         {
             var viewModel = new InstructorList();
-            viewModel.Instructors = instructorRepository.GetInstructors();
+            viewModel.Instructors = await instructorRepository.GetInstructors();
 
             if (id != null)
             {
@@ -32,65 +33,65 @@ namespace TutsUniversity.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            var instructor = instructorRepository.GetInstructor(id);
+            var instructor = await instructorRepository.GetInstructor(id);
             return View(instructor);
         }
 
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
-            ListAssignableCourses(Enumerable.Empty<Course>());
+            await ListAssignableCourses(Enumerable.Empty<Course>());
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "LastName,FirstMidName,HireDate,OfficeAssignment")]Instructor instructor, string[] selectedCourses)
+        public async Task<ActionResult> Create([Bind(Include = "LastName,FirstMidName,HireDate,OfficeAssignment")]Instructor instructor, string[] selectedCourses)
         {
             if (ModelState.IsValid)
             {
-                instructorRepository.Add(instructor, selectedCourses?.Select(int.Parse).ToArray() ?? new int[] { });
+                await instructorRepository.Add(instructor, selectedCourses?.Select(int.Parse).ToArray() ?? new int[] { });
                 return RedirectToAction("Index");
             }
 
-            ListAssignableCourses(instructor.Courses);
+            await ListAssignableCourses(instructor.Courses);
             return View(instructor);
         }
 
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            var instructor = instructorRepository.GetInstructor(id);
-            ListAssignableCourses(instructor.Courses);
+            var instructor = await instructorRepository.GetInstructor(id);
+            await ListAssignableCourses(instructor.Courses);
             return View(instructor);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string lastName, string firstMidName, DateTime hireDate, OfficeAssignment officeAssignment, string[] selectedCourses)
+        public async Task<ActionResult> Edit(int id, string lastName, string firstMidName, DateTime hireDate, OfficeAssignment officeAssignment, string[] selectedCourses)
         {
-            instructorRepository.Update(id, lastName, firstMidName, hireDate, officeAssignment.Location, selectedCourses?.Select(int.Parse).ToArray());
+            await instructorRepository.Update(id, lastName, firstMidName, hireDate, officeAssignment.Location, selectedCourses?.Select(int.Parse).ToArray());
             return RedirectToAction("Index");
         }
 
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
-            var instructor = instructorRepository.GetInstructor(id);
+            var instructor = await instructorRepository.GetInstructor(id);
             return View(instructor);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            instructorRepository.Delete(id);
+            await instructorRepository.Delete(id);
             return RedirectToAction("Index");
         }
 
-        private void ListAssignableCourses(IEnumerable<Course> currentlyAssignedCourses)
+        private async Task ListAssignableCourses(IEnumerable<Course> currentlyAssignedCourses)
         {
-            ViewBag.Courses = courseRepository
-                .GetCourses()
+            ViewBag.Courses = (await courseRepository
+                .GetCourses())
                 .Select(course => new AssignableCourse
                 {
                     CourseId = course.Id,
