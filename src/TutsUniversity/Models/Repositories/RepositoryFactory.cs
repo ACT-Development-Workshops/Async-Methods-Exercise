@@ -6,12 +6,12 @@ namespace TutsUniversity.Models.Repositories
     {
         public static ICourseRepository Courses => new CourseRepository();
 
-        public static IDepartmentRepository Departments = new DepartmentRepository();
+        public static IDepartmentRepository Departments => new DepartmentRepository();
 
-        public static IInstructorRepository Instructors = new InstructorRepository();
+        public static IInstructorRepository Instructors => new InstructorRepository();
 
-        public static IStudentRepository Students = new StudentRepository();
+        public static IStudentRepository Students => new StudentRepository();
 
-        public static IUpdateRepository Updates = new UpdateRepository();
+        public static IUpdateRepository Updates => new UpdateRepository();
     }
 }
