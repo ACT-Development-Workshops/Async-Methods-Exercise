@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models.Repositories;
 
@@ -14,9 +15,9 @@ namespace TutsUniversity.Models.Commands
         {
             private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
 
-            public void Handle(UpdateCourseCredits message)
+            public Task Handle(UpdateCourseCredits message)
             {
-                courseRepository.Update(message.CourseId, message.Credits);
+                return courseRepository.Update(message.CourseId, message.Credits);
             }
 
             public void Dispose() => courseRepository.Dispose();

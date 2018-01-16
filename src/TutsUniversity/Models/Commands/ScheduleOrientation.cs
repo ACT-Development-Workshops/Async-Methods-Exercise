@@ -1,4 +1,5 @@
-﻿using TutsUniversity.Infrastructure.Messaging;
+﻿using System.Threading.Tasks;
+using TutsUniversity.Infrastructure.Messaging;
 
 namespace TutsUniversity.Models.Commands
 {
@@ -12,9 +13,10 @@ namespace TutsUniversity.Models.Commands
         {
             private readonly SchedulingSystemApi schedulingSystemApi = new SchedulingSystemApi();
 
-            public void Handle(ScheduleOrientation message)
+            public Task Handle(ScheduleOrientation message)
             {
                 schedulingSystemApi.ScheduleNewStudentOrientation(message.StudentId, message.FullName);
+                return Task.CompletedTask;
             }
         }
 

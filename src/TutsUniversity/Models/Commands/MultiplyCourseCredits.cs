@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using TutsUniversity.Infrastructure.Messaging;
 using TutsUniversity.Models.Repositories;
+using TutsUniversity.Infrastructure;
 
 namespace TutsUniversity.Models.Commands
 {
@@ -13,10 +15,10 @@ namespace TutsUniversity.Models.Commands
             private readonly Bus bus = Bus.Instance;
             private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
 
-            public void Handle(MultiplyCourseCredits message)
+            public async Task Handle(MultiplyCourseCredits message)
             {
-                foreach (var course in courseRepository.GetCourses())
-                    bus.Send(new UpdateCourseCredits { CourseId = course.Id, Credits = course.Credits * message.Multiplier });
+                await (await courseRepository.GetCourses()).WaitForAllAndThenAggregateResults(course =>
+                    bus.Send(new UpdateCourseCredits { CourseId = course.Id, Credits = course.Credits * message.Multiplier }));
             }
 
             public void Dispose() => courseRepository.Dispose();
