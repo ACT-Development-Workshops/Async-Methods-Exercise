@@ -12,14 +12,11 @@ namespace TutsUniversity.Infrastructure.Auditing
         {
             TutsUniversityContext.SavingChanges += context =>
             {
-                if (!CurrentUpdateId.HasValue)
-                    return;
-
                 context.ChangeTracker.DetectChanges();
                 foreach (var item in context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
                 {
                     if (item.Entity is IUpdatable updatableEntity)
-                        updatableEntity.UpdateId = CurrentUpdateId.Value;
+                        updatableEntity.UpdateId = CurrentUpdateId.Value;//UpdateId must exist when updating an Updatable entity
                 }
             };
         }
