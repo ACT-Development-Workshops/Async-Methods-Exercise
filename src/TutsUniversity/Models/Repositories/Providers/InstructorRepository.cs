@@ -10,8 +10,11 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
 
-        public void Add(Instructor instructor)
+        public void Add(Instructor instructor, int[] selectedCourseIds)
         {
+            foreach (var course in context.Courses.Where(course => selectedCourseIds.Contains(course.Id)))
+                instructor.Courses.Add(course);
+
             context.Instructors.Add(instructor);
             context.SaveChanges();
         }

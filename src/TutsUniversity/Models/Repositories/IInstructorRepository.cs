@@ -5,7 +5,7 @@ namespace TutsUniversity.Models.Repositories
 {
     public interface IInstructorRepository : IDisposable
     {
-        void Add(Instructor instructor);
+        void Add(Instructor instructor, int[] selectedCourseIds);
 
         void Delete(int instructorId);
 

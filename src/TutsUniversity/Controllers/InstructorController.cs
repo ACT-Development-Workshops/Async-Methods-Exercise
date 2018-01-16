@@ -50,13 +50,7 @@ namespace TutsUniversity.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (selectedCourses != null)
-                {
-                    foreach (var course in selectedCourses)
-                        instructor.Courses.Add(courseRepository.GetCourse(int.Parse(course)));
-                }
-
-                instructorRepository.Add(instructor);
+                instructorRepository.Add(instructor, selectedCourses?.Select(int.Parse).ToArray() ?? new int[] { });
                 return RedirectToAction("Index");
             }
 
