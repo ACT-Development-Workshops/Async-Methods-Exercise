@@ -17,7 +17,7 @@ namespace TutsUniversity.Infrastructure.Auditing
                 return;
 
             var update = new Update { MadeBy = Environment.UserName, MadeOnUtc = DateTime.UtcNow };
-            updateRepository.Add(update);
+            updateRepository.Add(update).GetAwaiter().GetResult();
 
             UpdateContext.CurrentUpdateId = update.Id;
         }
