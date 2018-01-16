@@ -73,11 +73,11 @@ namespace TutsUniversity.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, string lastName, string firstMidName, DateTime hireDate, string location, string[] selectedCourses)
+        public ActionResult Edit(int id, string lastName, string firstMidName, DateTime hireDate, OfficeAssignment officeAssignment, string[] selectedCourses)
         {
             if (ModelState.IsValid)
             {
-                instructorRepository.Update(id, lastName, firstMidName, hireDate, location, selectedCourses.Select(int.Parse).ToArray());
+                instructorRepository.Update(id, lastName, firstMidName, hireDate, officeAssignment.Location, selectedCourses?.Select(int.Parse).ToArray());
                 return RedirectToAction("Index");
             }
 
