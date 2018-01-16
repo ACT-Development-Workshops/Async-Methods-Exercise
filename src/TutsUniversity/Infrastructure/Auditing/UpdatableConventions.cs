@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Reflection;
+using TutsUniversity.Infrastructure.Reflection;
 
 namespace TutsUniversity.Infrastructure.Auditing
 {
@@ -9,15 +10,19 @@ namespace TutsUniversity.Infrastructure.Auditing
         public UpdatableConventions()
         {
             Types()
-                .Where(t => typeof(IUpdatable).IsAssignableFrom(t))
-                .Configure(configuration =>
+                .Having(type =>
                 {
-                    var updateIdProperty = configuration.ClrType
-                        .GetProperties(BindingFlags.NonPublic | BindingFlags.Instance)
+                    if (!type.IsClass || !typeof(IUpdatable).IsAssignableFrom(type))
+                        return null;
+
+                    var updateIdProperty = type
+                        .AllCustomClassesInHierarchy()
+                        .SelectMany(t => t.GetProperties(BindingFlags.NonPublic | BindingFlags.Instance))
                         .Single(p => p.Name == "UpdateId" && p.PropertyType == typeof(int?) && p.CanRead && p.CanWrite);
 
-                    configuration.Property(updateIdProperty).IsOptional();
-                });
+                    return (updateIdProperty.ReflectedType == type) ? updateIdProperty : null;
+                })
+                .Configure((configuration, updateIdProperty) => configuration.Property(updateIdProperty).IsOptional());
         }
     }
 }
