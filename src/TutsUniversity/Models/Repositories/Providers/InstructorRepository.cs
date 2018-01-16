@@ -12,7 +12,7 @@ namespace TutsUniversity.Models.Repositories.Providers
 
         public void Add(Instructor instructor, int[] selectedCourseIds)
         {
-            foreach (var course in context.Courses.Where(course => selectedCourseIds.Contains(course.Id)))
+            foreach (var course in context.Courses.Where(course => selectedCourseIds.Contains(course.Id)).ToList())
                 instructor.Courses.Add(course);
 
             context.Instructors.Add(instructor);
@@ -74,7 +74,7 @@ namespace TutsUniversity.Models.Repositories.Providers
                     .Select(c => c.Id)
                     .ToList();
 
-                foreach (var course in context.Courses)
+                foreach (var course in context.Courses.ToList())
                 {
                     if (selectedCourseIds.Contains(course.Id))
                     {
