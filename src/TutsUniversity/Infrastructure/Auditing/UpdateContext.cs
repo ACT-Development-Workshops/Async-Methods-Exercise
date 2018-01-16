@@ -16,7 +16,10 @@ namespace TutsUniversity.Infrastructure.Auditing
                 foreach (var item in context.ChangeTracker.Entries().Where(e => e.State == EntityState.Modified))
                 {
                     if (item.Entity is IUpdatable updatableEntity)
+                    {
                         updatableEntity.UpdateId = CurrentUpdateId.Value;//UpdateId must exist when updating an Updatable entity
+                        item.Property(nameof(updatableEntity.UpdateId)).IsModified = true;
+                    }
                 }
             };
         }
