@@ -1,22 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using PagedList;
 
 namespace TutsUniversity.Models.Repositories
 {
     public interface IStudentRepository : IDisposable
     {
-        void Add(Student student);
+        Task Add(Student student);
 
-        void Delete(int studentId);
+        Task Delete(int studentId);
 
-        IEnumerable<DailyEnrollmentTotals> GetDailyEnrollmentTotals();
+        Task<IEnumerable<DailyEnrollmentTotals>> GetDailyEnrollmentTotals();
 
-        Student GetStudent(int studentId);
+        Task<Student> GetStudent(int studentId);
 
-        IPagedList<Student> Search(StudentSearchOptions searchOptions);
+        Task<IPagedList<Student>> Search(StudentSearchOptions searchOptions);
 
-        void Update(int studentId, string lastName, string firstMidName, DateTime enrollmentDate);
+        Task Update(int studentId, string lastName, string firstMidName, DateTime enrollmentDate);
     }
 
     public class StudentSearchOptions

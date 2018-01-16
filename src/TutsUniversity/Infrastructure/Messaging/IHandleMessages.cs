@@ -1,7 +1,9 @@
-﻿namespace TutsUniversity.Infrastructure.Messaging
+﻿using System.Threading.Tasks;
+
+namespace TutsUniversity.Infrastructure.Messaging
 {
     public interface IHandleMessages<TMessage>
     {
-        void Handle(TMessage message);
+        Task Handle(TMessage message);
     }
 }

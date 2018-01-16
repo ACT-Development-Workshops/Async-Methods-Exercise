@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace TutsUniversity.Models.Repositories
 {
     public interface IUpdateRepository : IDisposable
     {
-        void Add(Update update);
+        Task Add(Update update);
     }
 }

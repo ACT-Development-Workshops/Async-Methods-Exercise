@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TutsUniversity.Models.Repositories
 {
     public interface ICourseRepository : IDisposable
     {
-        void Add(Course course);
+        Task Add(Course course);
 
-        void Delete(int courseId);
+        Task Delete(int courseId);
 
-        Course GetCourse(int courseId);
+        Task<Course> GetCourse(int courseId);
 
-        IEnumerable<Course> GetCourses(int? departmentId = null);
+        Task<IEnumerable<Course>> GetCourses(int? departmentId = null);
 
-        void Update(int courseId, int credits);
+        Task Update(int courseId, int credits);
 
-        void Update(int courseId, string title, int credits, int departmentId);
+        Task Update(int courseId, string title, int credits, int departmentId);
     }
 }

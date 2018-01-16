@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TutsUniversity.Models.Repositories
 {
     public interface IInstructorRepository : IDisposable
     {
-        void Add(Instructor instructor, int[] selectedCourseIds);
+        Task Add(Instructor instructor, int[] selectedCourseIds);
 
-        void Delete(int instructorId);
+        Task Delete(int instructorId);
 
-        Instructor GetInstructor(int instructorId);
+        Task<Instructor> GetInstructor(int instructorId);
 
-        IEnumerable<Instructor> GetInstructors();
+        Task<IEnumerable<Instructor>> GetInstructors();
 
-        void Update(int instructorId, string lastName, string firstMidName, DateTime hireDate, string location, IEnumerable<int> selectedCourseIds);
+        Task Update(int instructorId, string lastName, string firstMidName, DateTime hireDate, string location, IEnumerable<int> selectedCourseIds);
     }
 }

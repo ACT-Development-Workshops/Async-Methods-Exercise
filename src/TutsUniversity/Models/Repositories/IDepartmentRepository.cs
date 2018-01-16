@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TutsUniversity.Models.Repositories
 {
     public interface IDepartmentRepository : IDisposable
     {
-        void Add(Department department);
+        Task Add(Department department);
 
-        void Delete(int departmentId);
+        Task Delete(int departmentId);
 
-        Department GetDepartment(int departmentId);
+        Task<Department> GetDepartment(int departmentId);
 
-        IEnumerable<Department> GetDepartments();
+        Task<IEnumerable<Department>> GetDepartments();
 
-        void Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version);
+        Task Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version);
     }
 }
