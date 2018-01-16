@@ -12,12 +12,12 @@ namespace TutsUniversity.Controllers
         private readonly ICourseRepository courseRepository = RepositoryFactory.Courses;
         private readonly IDepartmentRepository departmentRepository = RepositoryFactory.Departments;
 
-        public ActionResult Index(int? departmentId)
+        public ActionResult Index([Bind(Prefix = "SelectedDepartment")]int? selectedDepartmentId)
         {
             var departments = departmentRepository.GetDepartments();
-            ViewBag.SelectedDepartment = new SelectList(departments, "Id", "Name", departmentId);
+            ViewBag.SelectedDepartment = new SelectList(departments, "Id", "Name", selectedDepartmentId);
 
-            return View(courseRepository.GetCourses(departmentId));
+            return View(courseRepository.GetCourses(selectedDepartmentId));
         }
 
         public ActionResult Details(int id)
