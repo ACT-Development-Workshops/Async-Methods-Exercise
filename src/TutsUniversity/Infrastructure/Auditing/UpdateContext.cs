@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Threading;
 using TutsUniversity.Infrastructure.Data;
 
 namespace TutsUniversity.Infrastructure.Auditing
 {
     public static class UpdateContext
     {
+        private static readonly AsyncLocal<int?> currentUpdateId = new AsyncLocal<int?>();
+
         static UpdateContext()
         {
             TutsUniversityContext.SavingChanges += context =>
@@ -26,7 +28,7 @@ namespace TutsUniversity.Infrastructure.Auditing
 
         public static int? CurrentUpdateId
         {
-            get => HttpContext.Current.Items.Contains(nameof(CurrentUpdateId)) ? (int)HttpContext.Current.Items[nameof(CurrentUpdateId)] : (int?)null;
+            get => currentUpdateId.Value;
             set
             {
                 if (CurrentUpdateId.HasValue)
@@ -34,7 +36,7 @@ namespace TutsUniversity.Infrastructure.Auditing
                 if (value == null)
                     return;
 
-                HttpContext.Current.Items[nameof(CurrentUpdateId)] = value.Value;
+                currentUpdateId.Value = value.Value;
             }
         }
     }
