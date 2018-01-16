@@ -13,6 +13,6 @@ namespace TutsUniversity.Models.Repositories
 
         IEnumerable<Department> GetDepartments();
 
-        void Update(int departmentId, string name, decimal budget, DateTime startDate, int instructorId, byte[] version);
+        void Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version);
     }
 }

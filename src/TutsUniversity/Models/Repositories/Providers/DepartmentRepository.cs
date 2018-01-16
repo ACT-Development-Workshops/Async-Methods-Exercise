@@ -31,7 +31,7 @@ namespace TutsUniversity.Models.Repositories.Providers
             return context.Departments.OrderBy(d => d.Name).ToList();
         }
 
-        public void Update(int departmentId, string name, decimal budget, DateTime startDate, int instructorId, byte[] version)
+        public void Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version)
         {
             var department = GetDepartment(departmentId);
 
