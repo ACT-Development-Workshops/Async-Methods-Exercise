@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace TutsUniversity.Infrastructure.Messaging.Providers
 {
@@ -8,18 +9,21 @@ namespace TutsUniversity.Infrastructure.Messaging.Providers
     {
         private static readonly Dictionary<Type, Type> HandlerByMessageType = new Dictionary<Type, Type>();
 
-        public override void Send<TMessage>(TMessage message)
+        public override async Task Send<TMessage>(TMessage message)
         {
             var handler = (IHandleMessages<TMessage>)Activator.CreateInstance(HandlerByMessageType[message.GetType()]);
             try
             {
-                handler.Handle(message);
+                await ConfigurableYield().ConfigureAwait(false);//Clear context by forcing async execution w/context free continuation
+                await handler.Handle(message);//Handlers will execute in context free environment
             }
             finally
             {
                 (handler as IDisposable)?.Dispose();
             }
         }
+
+        private static async Task ConfigurableYield() => await Task.Yield();//Forces Async Execution
 
         static InMemoryBus()
         {
