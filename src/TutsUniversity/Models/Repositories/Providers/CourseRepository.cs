@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using TutsUniversity.Infrastructure.Data;
 
 namespace TutsUniversity.Models.Repositories.Providers
@@ -9,48 +10,48 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
 
-        public void Add(Course course)
+        public Task Add(Course course)
         {
             context.Courses.Add(course);
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
-        public void Delete(int courseId)
+        public async Task Delete(int courseId)
         {
-            context.Courses.Remove(GetCourse(courseId));
-            context.SaveChanges();
+            context.Courses.Remove(await GetCourse(courseId).ConfigureAwait(false));
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Course GetCourse(int courseId)
+        public Task<Course> GetCourse(int courseId)
         {
-            return context.Courses.Single(c => c.Id == courseId);
+            return context.Courses.SingleAsync(c => c.Id == courseId);
         }
 
-        public IEnumerable<Course> GetCourses(int? departmentId)
+        public Task<List<Course>> GetCourses(int? departmentId = null)
         {
             return context.Courses
                 .Where(c => !departmentId.HasValue || c.DepartmentId == departmentId)
                 .OrderBy(d => d.Id)
                 .Include(d => d.Department)
-                .ToList();
+                .ToListAsync();
         }
 
-        public void Update(int courseId, int credits)
+        public async Task Update(int courseId, int credits)
         {
-            var course = GetCourse(courseId);
+            var course = await GetCourse(courseId).ConfigureAwait(false);
             course.Credits = credits;
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void Update(int courseId, string title, int credits, int departmentId)
+        public async Task Update(int courseId, string title, int credits, int departmentId)
         {
-            var course = GetCourse(courseId);
+            var course = await GetCourse(courseId).ConfigureAwait(false);
 
             course.Title = title;
             course.Credits = credits;
             course.DepartmentId = departmentId;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void Dispose() => context.Dispose();

@@ -12,7 +12,7 @@ namespace TutsUniversity.Models.Repositories
 
         Task<Department> GetDepartment(int departmentId);
 
-        Task<IEnumerable<Department>> GetDepartments();
+        Task<List<Department>> GetDepartments();
 
         Task Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version);
     }

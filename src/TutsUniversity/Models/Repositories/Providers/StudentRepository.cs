@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using PagedList;
 using TutsUniversity.Infrastructure.Data;
 
@@ -10,19 +12,19 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
         
-        public void Add(Student student)
+        public Task Add(Student student)
         {
             context.Students.Add(student);
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
-        public void Delete(int studentId)
+        public async Task Delete(int studentId)
         {
-            context.Students.Remove(GetStudent(studentId));
-            context.SaveChanges();
+            context.Students.Remove(await GetStudent(studentId).ConfigureAwait(false));
+            await context.SaveChangesAsync();
         }
 
-        public IEnumerable<DailyEnrollmentTotals> GetDailyEnrollmentTotals()
+        public Task<List<DailyEnrollmentTotals>> GetDailyEnrollmentTotals()
         {
             return context.Students
                 .GroupBy(s => s.EnrollmentDate)
@@ -31,15 +33,15 @@ namespace TutsUniversity.Models.Repositories.Providers
                     EnrollmentDate = dateGrouping.Key,
                     StudentCount = dateGrouping.Count()
                 })
-                .ToList();
+                .ToListAsync();
         }
 
-        public Student GetStudent(int studentId)
+        public Task<Student> GetStudent(int studentId)
         {
-            return context.Students.Single(s => s.Id == studentId);
+            return context.Students.SingleAsync(s => s.Id == studentId);
         }
 
-        public IPagedList<Student> Search(StudentSearchOptions searchOptions)
+        public async Task<IPagedList<Student>> Search(StudentSearchOptions searchOptions)
         {
             var students = context.Students.Select(s => s);
             if (!string.IsNullOrEmpty(searchOptions.NameSearch))
@@ -62,18 +64,18 @@ namespace TutsUniversity.Models.Repositories.Providers
                     break;
             }
 
-            return students.ToPagedList(searchOptions.PageNumber, searchOptions.PageSize);
+            return (await students.ToListAsync().ConfigureAwait(false)).ToPagedList(searchOptions.PageNumber, searchOptions.PageSize);
         }
 
-        public void Update(int studentId, string lastName, string firstMidName, DateTime enrollmentDate)
+        public async Task Update(int studentId, string lastName, string firstMidName, DateTime enrollmentDate)
         {
-            var student = GetStudent(studentId);
+            var student = await GetStudent(studentId).ConfigureAwait(false);
 
             student.EnrollmentDate = enrollmentDate;
             student.FirstMidName = firstMidName;
             student.LastName = lastName;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void Dispose() => context.Dispose();

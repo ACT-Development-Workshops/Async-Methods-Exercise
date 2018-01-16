@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using TutsUniversity.Infrastructure.Data;
 
 namespace TutsUniversity.Models.Repositories.Providers
@@ -9,31 +11,31 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
 
-        public void Add(Department department)
+        public Task Add(Department department)
         {
             context.Departments.Add(department);
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
-        public void Delete(int departmentId)
+        public async Task Delete(int departmentId)
         {
-            context.Departments.Remove(GetDepartment(departmentId));
-            context.SaveChanges();
+            context.Departments.Remove(await GetDepartment(departmentId).ConfigureAwait(false));
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Department GetDepartment(int departmentId)
+        public Task<Department> GetDepartment(int departmentId)
         {
-            return context.Departments.Single(d => d.Id == departmentId);
+            return context.Departments.SingleAsync(d => d.Id == departmentId);
         }
 
-        public IEnumerable<Department> GetDepartments()
+        public Task<List<Department>> GetDepartments()
         {
-            return context.Departments.OrderBy(d => d.Name).ToList();
+            return context.Departments.OrderBy(d => d.Name).ToListAsync();
         }
 
-        public void Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version)
+        public async Task Update(int departmentId, string name, decimal budget, DateTime startDate, int? instructorId, byte[] version)
         {
-            var department = GetDepartment(departmentId);
+            var department = await GetDepartment(departmentId).ConfigureAwait(false);
 
             department.Budget = budget;
             department.InstructorId = instructorId;
@@ -41,7 +43,7 @@ namespace TutsUniversity.Models.Repositories.Providers
             department.RowVersion = version;
             department.StartDate = startDate;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public void Dispose() => context.Dispose();

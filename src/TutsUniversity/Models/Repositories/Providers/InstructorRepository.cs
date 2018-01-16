@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using TutsUniversity.Infrastructure.Data;
 
 namespace TutsUniversity.Models.Repositories.Providers
@@ -10,59 +11,60 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
 
-        public void Add(Instructor instructor, int[] selectedCourseIds)
+        public async Task Add(Instructor instructor, int[] selectedCourseIds)
         {
-            foreach (var course in context.Courses.Where(course => selectedCourseIds.Contains(course.Id)).ToList())
+            foreach (var course in await context.Courses.Where(course => selectedCourseIds.Contains(course.Id)).ToListAsync().ConfigureAwait(false))
                 instructor.Courses.Add(course);
 
             context.Instructors.Add(instructor);
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public void Delete(int instructorId)
+        public async Task Delete(int instructorId)
         {
-            var instructor = GetInstructor(instructorId);
+            var instructor = await GetInstructor(instructorId).ConfigureAwait(false);
 
             instructor.OfficeAssignment = null;
             context.Instructors.Remove(instructor);
 
-            var department = context.Departments.SingleOrDefault(d => d.InstructorId == instructorId);
+            var department = await context.Departments.SingleOrDefaultAsync(d => d.InstructorId == instructorId).ConfigureAwait(false);
             if (department != null)
                 department.InstructorId = null;
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
         }
 
-        public Instructor GetInstructor(int instructorId)
+        public Task<Instructor> GetInstructor(int instructorId)
         {
             return context.Instructors
                 .Include(i => i.OfficeAssignment)
                 .Include(i => i.Courses)
-                .Single(i => i.Id == instructorId);
+                .SingleAsync(i => i.Id == instructorId);
         }
 
-        public IEnumerable<Instructor> GetInstructors()
+        public Task<List<Instructor>> GetInstructors()
         {
             return context.Instructors
                 .Include(i => i.OfficeAssignment)
                 .Include(i => i.Courses.Select(c => c.Department))
-                .OrderBy(i => i.LastName);
+                .OrderBy(i => i.LastName)
+                .ToListAsync();
         }
 
-        public void Update(int instructorId, string lastName, string firstMidName, DateTime hireDate, string location, IEnumerable<int> selectedCourseIds)
+        public async Task Update(int instructorId, string lastName, string firstMidName, DateTime hireDate, string location, IEnumerable<int> selectedCourseIds)
         {
-            var instructor = GetInstructor(instructorId);
+            var instructor = await GetInstructor(instructorId).ConfigureAwait(false);
 
             instructor.FirstMidName = firstMidName;
             instructor.LastName = lastName;
             instructor.HireDate = hireDate;
             instructor.OfficeAssignment = !string.IsNullOrWhiteSpace(location) ? new OfficeAssignment {Location = location} : null;
 
-            UpdateCourses();
+            await UpdateCourses().ConfigureAwait(false);
 
-            context.SaveChanges();
+            await context.SaveChangesAsync().ConfigureAwait(false);
 
-            void UpdateCourses()
+            async Task UpdateCourses()
             {
                 if (selectedCourseIds == null)
                 {
@@ -74,7 +76,7 @@ namespace TutsUniversity.Models.Repositories.Providers
                     .Select(c => c.Id)
                     .ToList();
 
-                foreach (var course in context.Courses.ToList())
+                foreach (var course in await context.Courses.ToListAsync().ConfigureAwait(false))
                 {
                     if (selectedCourseIds.Contains(course.Id))
                     {

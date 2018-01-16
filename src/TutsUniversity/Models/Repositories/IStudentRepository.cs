@@ -11,7 +11,7 @@ namespace TutsUniversity.Models.Repositories
 
         Task Delete(int studentId);
 
-        Task<IEnumerable<DailyEnrollmentTotals>> GetDailyEnrollmentTotals();
+        Task<List<DailyEnrollmentTotals>> GetDailyEnrollmentTotals();
 
         Task<Student> GetStudent(int studentId);
 

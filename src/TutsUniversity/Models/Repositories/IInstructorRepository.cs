@@ -12,7 +12,7 @@ namespace TutsUniversity.Models.Repositories
 
         Task<Instructor> GetInstructor(int instructorId);
 
-        Task<IEnumerable<Instructor>> GetInstructors();
+        Task<List<Instructor>> GetInstructors();
 
         Task Update(int instructorId, string lastName, string firstMidName, DateTime hireDate, string location, IEnumerable<int> selectedCourseIds);
     }

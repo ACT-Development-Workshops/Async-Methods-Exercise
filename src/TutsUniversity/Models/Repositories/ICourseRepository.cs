@@ -12,7 +12,7 @@ namespace TutsUniversity.Models.Repositories
 
         Task<Course> GetCourse(int courseId);
 
-        Task<IEnumerable<Course>> GetCourses(int? departmentId = null);
+        Task<List<Course>> GetCourses(int? departmentId = null);
 
         Task Update(int courseId, int credits);
 

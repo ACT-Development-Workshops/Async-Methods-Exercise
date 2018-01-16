@@ -1,4 +1,5 @@
-﻿using TutsUniversity.Infrastructure.Data;
+﻿using System.Threading.Tasks;
+using TutsUniversity.Infrastructure.Data;
 
 namespace TutsUniversity.Models.Repositories.Providers
 {
@@ -6,10 +7,10 @@ namespace TutsUniversity.Models.Repositories.Providers
     {
         private readonly TutsUniversityContext context = new TutsUniversityContext();
 
-        public void Add(Update update)
+        public Task Add(Update update)
         {
             context.Updates.Add(update);
-            context.SaveChanges();
+            return context.SaveChangesAsync();
         }
 
         public void Dispose() => context.Dispose();
