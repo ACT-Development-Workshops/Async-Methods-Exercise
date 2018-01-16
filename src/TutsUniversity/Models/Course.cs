@@ -16,6 +16,7 @@ namespace TutsUniversity.Models
         [Range(0, 5)]
         public int Credits { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "Department is Required")]
         public int DepartmentId { get; set; }
 
         public virtual Department Department { get; set; }
