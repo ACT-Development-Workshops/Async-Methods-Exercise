@@ -50,8 +50,10 @@ namespace TutsUniversity.Models.Repositories.Providers
         {
             var instructor = GetInstructor(instructorId);
 
-            if (string.IsNullOrWhiteSpace(location))
-                instructor.OfficeAssignment = null;
+            instructor.FirstMidName = firstMidName;
+            instructor.LastName = lastName;
+            instructor.HireDate = hireDate;
+            instructor.OfficeAssignment = !string.IsNullOrWhiteSpace(location) ? new OfficeAssignment {Location = location} : null;
 
             UpdateCourses();
 
