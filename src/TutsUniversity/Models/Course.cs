@@ -11,6 +11,7 @@ namespace TutsUniversity.Models
         public int Id { get; set; }
 
         [StringLength(50, MinimumLength = 3)]
+        [Required]
         public string Title { get; set; }
 
         [Range(0, 5)]

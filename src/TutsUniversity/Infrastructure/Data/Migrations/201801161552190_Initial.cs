@@ -12,7 +12,7 @@ namespace TutsUniversity.Infrastructure.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false),
-                        Title = c.String(maxLength: 50),
+                        Title = c.String(nullable: false, maxLength: 50),
                         Credits = c.Int(nullable: false),
                         DepartmentId = c.Int(nullable: false),
                         UpdateId = c.Int(),
