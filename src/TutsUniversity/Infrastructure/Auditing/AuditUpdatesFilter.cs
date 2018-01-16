@@ -13,15 +13,13 @@ namespace TutsUniversity.Infrastructure.Auditing
         {
             if (filterContext.HttpContext.Request.HttpMethod != "POST")
                 return;
-            if (!ActionNameStartsWith("Edit") || !ActionNameStartsWith("Update"))
+            if (filterContext.ActionDescriptor.ActionName.StartsWith("Create", StringComparison.InvariantCultureIgnoreCase))
                 return;
 
             var update = new Update { MadeBy = Environment.UserName, MadeOnUtc = DateTime.UtcNow };
             updateRepository.Add(update);
 
             UpdateContext.CurrentUpdateId = update.Id;
-
-            bool ActionNameStartsWith(string prefix) => filterContext.ActionDescriptor.ActionName.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase);
         }
     }
 }
