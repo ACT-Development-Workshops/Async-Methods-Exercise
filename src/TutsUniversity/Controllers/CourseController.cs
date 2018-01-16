@@ -82,7 +82,7 @@ namespace TutsUniversity.Controllers
         public ActionResult UpdateCourseCredits(int multiplier)
         {
             bus.Send(new MultiplyCourseCredits { Multiplier = multiplier });
-            return View();
+            return RedirectToAction("Index");
         }
 
         private void ListDepartments(int? selectedDepartment = null)
